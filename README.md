@@ -1,6 +1,6 @@
 # 🚏 Buffer Dhaka — Arrival Reliability Planner
 
-[![Live Deployment](https://img.shields.io/badge/Live-Demo-emerald?style=for-the-badge&logo=githubpages&logoColor=white)](https://<YOUR_GITHUB_USERNAME>.github.io/buffer-dhaka/)
+[![Live Deployment](https://img.shields.io/badge/Live-Demo-emerald?style=for-the-badge&logo=githubpages&logoColor=white)](https://null-hydra.github.io/buffer-dhaka/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Supabase](https://img.shields.io/badge/Database-Supabase%20Postgres-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
 [![Python](https://img.shields.io/badge/Engine-Python%203.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
