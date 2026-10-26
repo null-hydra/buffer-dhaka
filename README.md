@@ -51,7 +51,7 @@ buffer-dhaka/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/null-hydra
+   git clone https://github.com/null-hydra/buffer-dhaka.git
   /buffer-dhaka.git
    cd buffer-dhaka
    ```
