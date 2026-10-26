@@ -1,0 +1,28 @@
+/* Custom Scrollbar Styles for Dhaka Transit Cards */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Custom Gradients */
+.transit-gradient-bus {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.transit-gradient-metro {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+}
