@@ -1,1 +1,3 @@
-requirements.txt, *.py, scripts/
+requirements.txt
+*.py
+scripts/
