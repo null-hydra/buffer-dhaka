@@ -18,9 +18,9 @@
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- 1. Browser Tab Logo (Favicon) -->
-  <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23059669'/%3E%3Ccircle cx='50' cy='46' r='24' fill='none' stroke='white' stroke-width='9'/%3E%3Cpath d='M50 32v14l9 6' fill='none' stroke='white' stroke-width='8' stroke-linecap='round'/%3E%3Cpath d='M36 74L50 88L64 74' fill='none' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
-  <link id="appleTouchIcon" rel="apple-touch-icon" href="" />
+    <!-- Browser Tab Favicon & Phone Home Screen Icon using your logo.png -->
+  <link id="faviconLink" rel="icon" type="image/png" href="logo.png" />
+  <link id="appleTouchIcon" rel="apple-touch-icon" href="logo.png" />
   <meta name="theme-color" content="#059669" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -34,11 +34,11 @@
       <div class="max-w-5xl mx-auto px-4 sm:px-6 py-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shadow-inner shrink-0">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-              </svg>
-            </div>
+                        <img 
+              src="logo.png" 
+              alt="Buffer Dhaka Logo" 
+              class="w-11 h-11 rounded-xl object-cover shadow-md border border-emerald-400/30 shrink-0" 
+            />
             <div>
               <div class="flex items-center gap-2.5">
                 <h1 class="font-extrabold text-xl sm:text-2xl tracking-tight text-white">Buffer Dhaka</h1>
@@ -339,15 +339,37 @@
     </main>
   </div>
 
-  <!-- FOOTER WITH MUNTASIR ISLAM LINKEDIN CREDIT -->
+   <!-- FOOTER WITH LOGO, SHARE BUTTON & MUNTASIR ISLAM LINKEDIN CREDIT -->
   <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 py-8 mt-auto">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="text-center sm:text-left">
-        <div class="font-extrabold text-white text-sm">Buffer Dhaka — Smart Arrival Reliability Planner</div>
-        <p class="text-xs text-slate-400 mt-0.5">Helping Dhaka commuters beat traffic with smart departure buffers.</p>
+      <!-- Left: Logo + Brand Description -->
+      <div class="flex items-center gap-3.5 text-center sm:text-left">
+        <img 
+          src="logo.png" 
+          alt="Buffer Dhaka Logo" 
+          class="w-10 h-10 rounded-xl object-cover border border-emerald-500/30 shrink-0 hidden sm:block" 
+        />
+        <div>
+          <div class="font-extrabold text-white text-sm">Buffer Dhaka — Smart Arrival Reliability Planner</div>
+          <p class="text-xs text-slate-400 mt-0.5">Helping Dhaka commuters beat traffic with smart departure buffers.</p>
+        </div>
       </div>
-      <div class="flex items-center gap-3">
+
+      <!-- Right: Share Button + Developer Credit + LinkedIn -->
+      <div class="flex flex-wrap items-center justify-center sm:justify-end gap-3">
+        <button 
+          onclick="shareBufferWebsite()" 
+          class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-extrabold transition shadow-sm"
+          title="Share Buffer Dhaka with friends and family"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          </svg>
+          <span id="shareBtnText">Share Website</span>
+        </button>
+
         <span class="text-xs text-slate-400">Developed by <strong class="text-white">Muntasir Islam</strong></span>
+
         <a 
           href="https://www.linkedin.com/in/muntasir-islam-shafin" 
           target="_blank" 
@@ -2282,52 +2304,30 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
 
     initCorridors();
     populateSubAreas(0);
-        // --- PWA HOME SCREEN ICON, MANIFEST & INSTALL BUTTON LOGIC ---
+           // --- PWA APP ICON (logo.png), AUTO-HIDE INSTALL BUTTON & SHARE LOGIC ---
     let deferredInstallPrompt = null;
 
+    function hideInstallButtonPermanently() {
+      const btn = document.getElementById('installAppBtn');
+      if (btn) btn.classList.add('hidden');
+      try { localStorage.setItem('bufferDhakaAppInstalled', 'true'); } catch (e) {}
+    }
+
     (function setupBufferPWA() {
-      // 1. Draw a crisp 192x192 PNG App Icon on the fly for Android/iOS Home Screen
-      const canvas = document.createElement('canvas');
-      canvas.width = 192;
-      canvas.height = 192;
-      const ctx = canvas.getContext('2d');
+      // 1. Check if already installed or running as standalone home-screen app
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      let wasInstalledBefore = false;
+      try { wasInstalledBefore = localStorage.getItem('bufferDhakaAppInstalled') === 'true'; } catch (e) {}
 
-      // Green rounded background
-      ctx.fillStyle = '#059669';
-      ctx.beginPath();
-      ctx.roundRect(0, 0, 192, 192, 44);
-      ctx.fill();
+      if (isStandalone || wasInstalledBefore) {
+        hideInstallButtonPermanently();
+      }
 
-      // White clock/pin circle
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 16;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.beginPath();
-      ctx.arc(96, 86, 44, 0, Math.PI * 2);
-      ctx.stroke();
+      // 2. Resolve absolute URL for logo.png so Web Manifest loads it cleanly
+      const logoAbsoluteUrl = new URL('logo.png', window.location.href).href;
 
-      // Clock hands
-      ctx.beginPath();
-      ctx.moveTo(96, 62);
-      ctx.lineTo(96, 86);
-      ctx.lineTo(114, 98);
-      ctx.stroke();
-
-      // Location pointer bottom V
-      ctx.beginPath();
-      ctx.moveTo(68, 138);
-      ctx.lineTo(96, 166);
-      ctx.lineTo(124, 138);
-      ctx.stroke();
-
-      const pngIconUrl = canvas.toDataURL('image/png');
-      const appleIcon = document.getElementById('appleTouchIcon');
-      if (appleIcon) appleIcon.href = pngIconUrl;
-
-      // 2. Inject Dynamic Web App Manifest so phones recognize it as an installable App
       const manifest = {
-        name: 'Buffer Dhaka — A Commute Intelligence',
+        name: 'Buffer Dhaka — Commute Intelligence',
         short_name: 'Buffer Dhaka',
         description: 'Smart Transit, Official Fare & Arrival Reliability Planner for Dhaka',
         start_url: window.location.href,
@@ -2335,8 +2335,8 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         background_color: '#0f172a',
         theme_color: '#059669',
         icons: [
-          { src: pngIconUrl, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-          { src: pngIconUrl, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+          { src: logoAbsoluteUrl, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+          { src: logoAbsoluteUrl, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
         ]
       };
 
@@ -2346,7 +2346,6 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
       manifestLink.href = URL.createObjectURL(manifestBlob);
       document.head.appendChild(manifestLink);
 
-      // 3. Register a lightweight Service Worker (required by Chrome/Android for 1-click install)
       if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
         const swCode = "self.addEventListener('fetch', function(e) {});";
         const swBlob = new Blob([swCode], { type: 'application/javascript' });
@@ -2354,29 +2353,61 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
       }
     })();
 
-    // Capture Chrome/Android/Desktop native install prompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredInstallPrompt = e;
     });
 
-    // Triggered when user clicks "Download App to Get Updated"
+    // Automatically hide button the moment the app finishes installing
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      hideInstallButtonPermanently();
+    });
+
     async function installBufferApp() {
       if (deferredInstallPrompt) {
         deferredInstallPrompt.prompt();
         const { outcome } = await deferredInstallPrompt.userChoice;
         if (outcome === 'accepted') {
           deferredInstallPrompt = null;
+          hideInstallButtonPermanently();
         }
         return;
       }
 
-      // Helpful fallback instructions for iPhone/Safari or browsers where native prompt isn't ready
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
       if (isIOS) {
-        alert('To install Buffer Dhaka on your iPhone:\n\n1. Tap the Share button (square with arrow) at the bottom of Safari.\n2. Scroll down and tap "Add to Home Screen".');
+        alert('To install Buffer Dhaka on your iPhone:\n\n1. Tap the Share button at the bottom of Safari.\n2. Tap "Add to Home Screen".');
       } else {
-        alert('To add Buffer Dhaka to your phone Home Screen:\n\n1. Tap the 3-dots menu (⋮) in the top-right corner of your browser.\n2. Tap "Add to Home screen" or "Install app".');
+        alert('To add Buffer Dhaka to your phone Home Screen:\n\n1. Tap the 3-dots menu (⋮) in your browser.\n2. Tap "Add to Home screen" or "Install app".');
+      }
+      hideInstallButtonPermanently();
+    }
+
+    // Native Share / Copy Link Function for Footer Share Button
+    async function shareBufferWebsite() {
+      const shareData = {
+        title: 'Buffer Dhaka — Smart Arrival & Transit Planner',
+        text: 'Beat Dhaka traffic! Check exact bus/metro fares, nearest boarding hubs, and reliable departure times on Buffer Dhaka:',
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+          return;
+        } catch (err) {}
+      }
+
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        const btnText = document.getElementById('shareBtnText');
+        if (btnText) {
+          btnText.textContent = 'Link Copied! ✓';
+          setTimeout(() => { btnText.textContent = 'Share Website'; }, 2500);
+        }
+      } catch (err) {
+        prompt('Copy this link to share Buffer Dhaka:', window.location.href);
       }
     }
   </script>
