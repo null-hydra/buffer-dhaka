@@ -499,6 +499,146 @@
      * with realistic walking/rickshaw distance & fare—never a bus stand!
      */
     const CORRIDORS = [
+      // 23. MIRPUR (10/11/12/14) <-> BASHUNDHARA / BADDA / RAMPURA BRIDGE
+      {
+        id: 'mirpur_badda_rampura',
+        originShort: 'Mirpur (10 / 11 / 12 / 14)',
+        destShort: 'Bashundhara / Badda / Rampura',
+        label: 'Mirpur (10/11/12) ➔ Bashundhara, Badda & Rampura Bridge',
+        reverseLabel: 'Rampura Bridge / Badda / Bashundhara ➔ Mirpur (10/11/12)',
+        keywords: ['mirpur', 'kalshi', 'bashundhara', 'kuril', 'notun bazar', 'badda', 'merul badda', 'rampura', 'banasree', 'bracu', 'ewu', 'aiub', 'uiu'],
+        subAreas: [
+          { name: 'Mirpur 10 Gol Chattar (Block A/B/C/D)', busHub: 'Mirpur 10 Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Mirpur 11 / Pallabi / Kalshi Flyover', busHub: 'Kalshi Flyover Ramp Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
+          { name: 'Mirpur 11.5 / Ceramic / Purobi', busHub: 'Purobi / Kalshi Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station', metroWalk: 7, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
+          { name: 'Mirpur 12 / Mirpur DOHS / Terminal', busHub: 'Mirpur 12 Bus Terminal', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station', metroWalk: 12, metroRick: 6, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Mirpur 14 / ECB Chattar', busHub: 'ECB Chattar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station', metroWalk: 18, metroRick: 9, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 6 }
+        ],
+        destSubAreas: [
+          { name: 'Bashundhara Gate / Jamuna Future Park (NSU/IUB)', busHub: 'Jamuna Future Park Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Uttara South MRT Station', metroWalk: 35, metroRick: 18, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Notun Bazar / Baridhara J-Block (UIU Shuttle)', busHub: 'Notun Bazar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon MRT Station', metroWalk: 38, metroRick: 20, metroRickFare: 90, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Middle Badda / Merul Badda (BRACU / EWU Gate)', busHub: 'Middle / Merul Badda Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Karwan Bazar MRT Station', metroWalk: 32, metroRick: 16, metroRickFare: 75, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Rampura Bridge / Banasree Main Gate (Block A–D)', busHub: 'Rampura Bridge Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Karwan Bazar MRT Station', metroWalk: 30, metroRick: 15, metroRickFare: 70, hasLeguna: true, legunaFare: 15, legunaMins: 6 }
+        ]
+      },
+
+      // 24. MOHAMMADPUR / LALMATIA <-> BASHUNDHARA / KURIL / NOTUN BAZAR
+      {
+        id: 'mohammadpur_bashundhara',
+        originShort: 'Mohammadpur / Adabor / Lalmatia',
+        destShort: 'Bashundhara / Kuril / Notun Bazar',
+        label: 'Mohammadpur / Lalmatia ➔ Kuril, Bashundhara Gate & Notun Bazar',
+        reverseLabel: 'Bashundhara / Kuril / Notun Bazar ➔ Mohammadpur & Lalmatia',
+        keywords: ['mohammadpur', 'adabor', 'lalmatia', 'shia masjid', 'town hall', 'bashundhara', 'kuril', 'jamuna future park', 'notun bazar', 'nsu', 'iub', 'aiub'],
+        subAreas: [
+          { name: 'Mohammadpur Bus Stand (Allah Karim)', busHub: 'Mohammadpur Terminal', busWalk: 4, busRick: 2, busRickFare: 20, metroHub: 'Farmgate MRT Station', metroWalk: 25, metroRick: 12, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 10 },
+          { name: 'Shia Masjid / Japan Garden City / Ring Road', busHub: 'Shia Masjid Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon MRT Station', metroWalk: 20, metroRick: 10, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
+          { name: 'Town Hall / Tajmahal Road / Lalmatia', busHub: 'Asad Gate / Town Hall Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Farmgate MRT Station', metroWalk: 20, metroRick: 10, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
+          { name: 'Adabor / Shekhertek', busHub: 'Shyamoli / Ring Road Stand', busWalk: 9, busRick: 5, busRickFare: 30, metroHub: 'Agargaon MRT Station', metroWalk: 22, metroRick: 11, metroRickFare: 55, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+        ],
+        destSubAreas: [
+          { name: 'Bashundhara Gate / Jamuna Future Park (NSU/IUB)', busHub: 'Jamuna Future Park Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Uttara South MRT Station', metroWalk: 35, metroRick: 18, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Kuril Bishwa Road / AIUB', busHub: 'Kuril Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Uttara South MRT Station', metroWalk: 32, metroRick: 16, metroRickFare: 75, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Notun Bazar / Baridhara', busHub: 'Notun Bazar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon MRT Station', metroWalk: 38, metroRick: 20, metroRickFare: 90, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+        ]
+      },
+
+      // 25. MIRPUR (1/2/10) <-> MOHAKHALI / TEJGAON / KARWAN BAZAR
+      {
+        id: 'mirpur_mohakhali_tejgaon',
+        originShort: 'Mirpur (1 / 2 / 10 / Kazipara)',
+        destShort: 'Mohakhali / Tejgaon / Karwan Bazar',
+        label: 'Mirpur (1/2/10) ➔ Mohakhali, Tejgaon & Karwan Bazar',
+        reverseLabel: 'Mohakhali / Tejgaon / Karwan Bazar ➔ Mirpur (1/2/10)',
+        keywords: ['mirpur', 'kazipara', 'shewrapara', 'agargaon', 'mohakhali', 'tejgaon', 'nabisco', 'satrasta', 'karwan bazar', 'bijoy sarani'],
+        subAreas: [
+          { name: 'Mirpur 10 Gol Chattar', busHub: 'Mirpur 10 Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Mirpur 1 / Mirpur 2 (Sony / Stadium)', busHub: 'Mirpur 1 / 2 Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 10 MRT Station', metroWalk: 16, metroRick: 8, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 6 },
+          { name: 'Kazipara / Shewrapara', busHub: 'Kazipara / Shewrapara Stop', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Kazipara / Shewrapara MRT Station', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Agargaon / Taltola', busHub: 'Agargaon Bus Stop', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon MRT Station', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: true, legunaFare: 15, legunaMins: 4 }
+        ],
+        destSubAreas: [
+          { name: 'Mohakhali Bus Terminal / Nabisco / TB Gate', busHub: 'Mohakhali / Nabisco Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Bijoy Sarani MRT Station', metroWalk: 16, metroRick: 8, metroRickFare: 45, hasLeguna: true, legunaFare: 15, legunaMins: 6 },
+          { name: 'Tejgaon Link Road / Satrasta / Gulshan Link', busHub: 'Tejgaon / Nabisco Stand', busWalk: 8, busRick: 5, busRickFare: 30, metroHub: 'Karwan Bazar / Farmgate MRT Station', metroWalk: 14, metroRick: 7, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Karwan Bazar / Bijoy Sarani', busHub: 'Karwan Bazar Bus Stop', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Karwan Bazar / Bijoy Sarani MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+        ]
+      },
+
+      // 26. UTTARA <-> MIRPUR (10 / 11 / 12)
+      {
+        id: 'uttara_mirpur10',
+        originShort: 'Uttara (Sectors 1–18)',
+        destShort: 'Mirpur (10 / 11 / 12 / Pallabi)',
+        label: 'Uttara ➔ Mirpur 10, Mirpur 11, Pallabi & Mirpur 12',
+        reverseLabel: 'Mirpur (10 / 11 / 12 / Pallabi) ➔ Uttara',
+        keywords: ['uttara', 'diabari', 'house building', 'mirpur 10', 'mirpur 11', 'mirpur 12', 'pallabi', 'kalshi'],
+        subAreas: [
+          { name: 'Uttara Sector 7 / House Building / BNS', busHub: 'House Building Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Uttara North MRT Station (Diabari)', metroWalk: 24, metroRick: 12, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 10 },
+          { name: 'Uttara Sector 11 / Sector 13 (Garib-e-Newaz)', busHub: 'House Building Stand', busWalk: 18, busRick: 9, busRickFare: 50, metroHub: 'Uttara Center MRT Station (Closest)', metroWalk: 10, metroRick: 5, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Uttara Sector 15 / 16 / 18 (Diabari)', busHub: 'House Building Stand', busWalk: 30, busRick: 15, busRickFare: 70, metroHub: 'Uttara North MRT Station (Doorstep)', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Uttara Sector 3 / Sector 4 (Rajlakshmi)', busHub: 'Rajlakshmi / Azampur Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Uttara South MRT Station (Closest)', metroWalk: 20, metroRick: 10, metroRickFare: 60, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+        ],
+        destSubAreas: [
+          { name: 'Mirpur 10 Roundabout (Block A/B/C/D)', busHub: 'Mirpur 10 Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Mirpur 11 / Pallabi', busHub: 'Pallabi / Mirpur 11 Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Pallabi / Mirpur 11 MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
+          { name: 'Mirpur 12 / DOHS Gate', busHub: 'Mirpur 12 Bus Terminal', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station (Closest)', metroWalk: 12, metroRick: 6, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+        ]
+      },
+
+      // 27. DHANMONDI / SCIENCE LAB <-> BASHUNDHARA / KURIL / NOTUN BAZAR
+      {
+        id: 'dhanmondi_bashundhara',
+        originShort: 'Dhanmondi / Science Lab / Green Road',
+        destShort: 'Bashundhara Gate / Kuril / Notun Bazar',
+        label: 'Dhanmondi / Science Lab ➔ Kuril, Bashundhara Gate & Notun Bazar',
+        reverseLabel: 'Bashundhara / Kuril / Notun Bazar ➔ Dhanmondi & Science Lab',
+        keywords: ['dhanmondi', 'science lab', 'kalabagan', 'green road', 'panthapath', 'bashundhara', 'kuril', 'jamuna future park', 'notun bazar', 'nsu', 'iub', 'aiub'],
+        subAreas: [
+          { name: 'Dhanmondi 27 / Rapa Plaza / Asad Gate', busHub: 'Dhanmondi 27 / Asad Gate Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Farmgate MRT Station', metroWalk: 16, metroRick: 8, metroRickFare: 45, hasLeguna: true, legunaFare: 15, legunaMins: 6 },
+          { name: 'Science Lab / Kalabagan / Dhanmondi 2', busHub: 'Science Lab / Kalabagan Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Shahbagh MRT Station', metroWalk: 14, metroRick: 6, metroRickFare: 35, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Green Road / Panthapath / Square Hospital', busHub: 'Farmgate / Khamarbari Stand', busWalk: 10, busRick: 5, busRickFare: 30, metroHub: 'Farmgate / Karwan Bazar MRT Station', metroWalk: 9, metroRick: 5, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 }
+        ],
+        destSubAreas: [
+          { name: 'Bashundhara Gate / Jamuna Future Park (NSU/IUB)', busHub: 'Jamuna Future Park Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Uttara South MRT Station', metroWalk: 35, metroRick: 18, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Notun Bazar / Badda Link Road', busHub: 'Notun Bazar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon MRT Station', metroWalk: 38, metroRick: 20, metroRickFare: 90, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+        ]
+      },
+
+      // 28. GABTOLI / KALYANPUR / SHYAMOLI <-> BASHUNDHARA / KURIL / BADDA
+      {
+        id: 'gabtoli_bashundhara',
+        originShort: 'Gabtoli / Technical / Shyamoli',
+        destShort: 'Kuril / Bashundhara / Notun Bazar',
+        label: 'Gabtoli / Kalyanpur / Shyamoli ➔ Kuril, Bashundhara & Notun Bazar',
+        reverseLabel: 'Bashundhara / Kuril / Notun Bazar ➔ Shyamoli, Kalyanpur & Gabtoli',
+        keywords: ['gabtoli', 'technical', 'kalyanpur', 'shyamoli', 'kuril', 'bashundhara', 'jamuna future park', 'notun bazar', 'badda'],
+        subAreas: [
+          { name: 'Gabtoli Terminal / Technical Intersection', busHub: 'Gabtoli / Technical Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station', metroWalk: 25, metroRick: 12, metroRickFare: 55, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
+          { name: 'Kalyanpur / Shyamoli / Shishu Mela', busHub: 'Kalyanpur / Shyamoli Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon MRT Station', metroWalk: 14, metroRick: 6, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+        ],
+        destSubAreas: [
+          { name: 'Bashundhara Gate / Jamuna Future Park / Kuril', busHub: 'Jamuna Future Park Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Uttara South MRT Station', metroWalk: 35, metroRick: 18, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Notun Bazar / Middle Badda', busHub: 'Notun Bazar Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon MRT Station', metroWalk: 38, metroRick: 20, metroRickFare: 90, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+        ]
+      },
+
+      // 29. OLD DHAKA (SADARGHAT / CHAWKBAZAR) <-> MOTIJHEEL / DHANMONDI
+      {
+        id: 'olddhaka_dhanmondi',
+        originShort: 'Old Dhaka (Sadarghat / Ray Saheb Bazar)',
+        destShort: 'Motijheel / Shahbagh / Dhanmondi',
+        label: 'Old Dhaka (Sadarghat / Victoria Park) ➔ Motijheel, Shahbagh & Dhanmondi',
+        reverseLabel: 'Dhanmondi / Shahbagh / Motijheel ➔ Old Dhaka (Sadarghat / Victoria Park)',
+        keywords: ['sadarghat', 'old dhaka', 'puran dhaka', 'victoria park', 'ray saheb bazar', 'chawkbazar', 'lalbagh', 'motijheel', 'shahbagh', 'dhanmondi', 'science lab'],
+        subAreas: [
+          { name: 'Sadarghat / Victoria Park (JnU)', busHub: 'Victoria Park Bus Terminal', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Bangladesh Secretariat MRT Station (Closest)', metroWalk: 20, metroRick: 10, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
+          { name: 'Ray Saheb Bazar / Naya Bazar / Tati Bazar', busHub: 'Ray Saheb Bazar Stop', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Bangladesh Secretariat MRT Station', metroWalk: 16, metroRick: 8, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 7 }
+        ],
+        destSubAreas: [
+          { name: 'Dhanmondi / Science Lab / New Market', busHub: 'Science Lab / New Market Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Shahbagh / Dhaka University (TSC) MRT Station', metroWalk: 14, metroRick: 6, metroRickFare: 35, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Shahbagh / Press Club / Motijheel', busHub: 'Shahbagh / Motijheel Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Motijheel / Secretariat MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+        ]
+      }
             // MIRPUR 10/11/12/14 <-> BASHUNDHARA / BADDA / RAMPURA
       {
         id: 'mirpur_badda_rampura',
@@ -973,6 +1113,240 @@
      * ROUTE OPTIONS DATASET
      */
     const ROUTES_DATA = [
+      // 23. MIRPUR <-> BASHUNDHARA / BADDA / RAMPURA
+      {
+        id: 'm10_badda_bus',
+        corridorId: 'mirpur_badda_rampura',
+        category: 'public',
+        modeType: 'bus',
+        boardingHubType: 'bus',
+        title: 'Direct Bus via Kalshi Flyover & Pragati Sarani (Nur E Makkah / Akik / Robrob / Ochim)',
+        busOperators: ['Nur E Makkah', 'Akik Paribahan', 'Robrob', 'Ochim Paribahan', 'Jabale Noor'],
+        stops: 'Mirpur 10/11/12 -> Kalshi Flyover -> ECB Chattar -> Kuril Bishwa Road -> Jamuna Future Park -> Notun Bazar -> Middle Badda -> Rampura Bridge',
+        costBdt: 35,
+        waitMins: '3 to 6 mins',
+        bottleneck: 'Kalshi Flyover is fast; slowdowns occur at Jamuna Future Park U-turn, Notun Bazar signal, and Badda U-loop.',
+        mapQuery: 'Mirpur+10+Dhaka+to+Kalshi+Flyover+to+Jamuna+Future+Park+to+Rampura+Bridge+Dhaka',
+        rainMultiplier: 1.45,
+        thursdayMultiplier: 1.35,
+        durations: [35, 38, 40, 42, 45, 48, 50, 52, 55, 58, 62, 66, 70, 75, 80, 86, 92, 100, 110, 120]
+      },
+      {
+        id: 'm10_badda_bike',
+        corridorId: 'mirpur_badda_rampura',
+        category: 'rideshare',
+        modeType: 'rideshare',
+        boardingHubType: 'bus',
+        title: 'Pathao / Uber Bike via Kalshi Flyover, Kuril & Pragati Sarani',
+        busOperators: ['Pathao Bike', 'Uber Moto'],
+        stops: 'Mirpur -> Kalshi Flyover -> ECB -> Kuril Overpass -> Notun Bazar -> Badda -> Rampura',
+        costBdt: 210,
+        waitMins: '3 to 5 mins app pickup',
+        bottleneck: 'Bypasses bus queues over Kalshi and Kuril flyovers in 25–35 minutes.',
+        mapQuery: 'Mirpur+10+Dhaka+to+ECB+Chattar+to+Notun+Bazar+to+Rampura+Bridge+Dhaka',
+        rainMultiplier: 1.40,
+        thursdayMultiplier: 1.25,
+        durations: [22, 24, 25, 27, 28, 30, 31, 33, 35, 37, 40, 43, 46, 50, 54, 58, 62, 66, 70, 75]
+      },
+
+      // 24. MOHAMMADPUR <-> BASHUNDHARA / KURIL / NOTUN BAZAR
+      {
+        id: 'moh_bash_bus',
+        corridorId: 'mohammadpur_bashundhara',
+        category: 'public',
+        modeType: 'bus',
+        boardingHubType: 'bus',
+        title: 'Direct Bus (Projapoti / Alif / BRTC / Taranga Plus)',
+        busOperators: ['Projapoti Paribahan', 'Alif Paribahan', 'BRTC', 'Taranga Plus'],
+        stops: 'Mohammadpur / Shia Masjid -> Shyamoli -> Agargaon / ECB or Mohakhali -> Banani / Kuril -> Bashundhara Gate -> Notun Bazar',
+        costBdt: 40,
+        waitMins: '4 to 7 mins',
+        bottleneck: 'Cross-city route; faces Shyamoli, Banani/Kakoli, and Jamuna Future Park U-turn congestion.',
+        mapQuery: 'Mohammadpur+Bus+Stand+Dhaka+to+Shyamoli+to+Jamuna+Future+Park+Dhaka',
+        rainMultiplier: 1.55,
+        thursdayMultiplier: 1.45,
+        durations: [50, 54, 58, 62, 65, 68, 72, 75, 78, 82, 86, 92, 98, 105, 112, 120, 128, 136, 145, 155]
+      },
+      {
+        id: 'moh_bash_bike',
+        corridorId: 'mohammadpur_bashundhara',
+        category: 'rideshare',
+        modeType: 'rideshare',
+        boardingHubType: 'bus',
+        title: 'Pathao / Uber Bike via Agargaon, Jahangir Gate & Kuril Flyover',
+        busOperators: ['Pathao Bike', 'Uber Moto'],
+        stops: 'Mohammadpur -> Shyamoli -> Agargaon -> Banani Overpass -> Kuril -> Bashundhara Gate',
+        costBdt: 240,
+        waitMins: '4 mins app pickup',
+        bottleneck: 'Cuts travel time in half during morning university & office hours.',
+        mapQuery: 'Mohammadpur+Dhaka+to+Banani+to+Jamuna+Future+Park+Dhaka',
+        rainMultiplier: 1.45,
+        thursdayMultiplier: 1.30,
+        durations: [30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 54, 58, 62, 66, 70, 75, 80, 85, 90]
+      },
+
+      // 25. MIRPUR <-> MOHAKHALI / TEJGAON / KARWAN BAZAR
+      {
+        id: 'mir_moh_metro',
+        corridorId: 'mirpur_mohakhali_tejgaon',
+        category: 'public',
+        modeType: 'metro',
+        boardingHubType: 'metro',
+        title: 'Dhaka Metro Rail (MRT-6) to Bijoy Sarani / Karwan Bazar + Short Feeder',
+        busOperators: ['Dhaka Metro MRT-6'],
+        stops: 'Mirpur 10 MRT -> Kazipara MRT -> Shewrapara MRT -> Agargaon MRT -> Bijoy Sarani / Farmgate / Karwan Bazar MRT',
+        costBdt: 40,
+        waitMins: '5 mins platform wait',
+        bottleneck: '12-minute train ride completely skips Rokeya Sarani & Bijoy Sarani signal gridlock.',
+        mapQuery: 'Mirpur+10+Metro+Station+to+Bijoy+Sarani+Metro+Station+to+Karwan+Bazar+Metro+Station+Dhaka',
+        rainMultiplier: 1.05,
+        thursdayMultiplier: 1.05,
+        durations: [14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 24, 25]
+      },
+      {
+        id: 'mir_moh_bus',
+        corridorId: 'mirpur_mohakhali_tejgaon',
+        category: 'public',
+        modeType: 'bus',
+        boardingHubType: 'bus',
+        title: 'Direct Bus (Bihanga / Shikhor / Independent / Alif)',
+        busOperators: ['Bihanga', 'Shikhor', 'Alif', 'BRTC'],
+        stops: 'Mirpur -> Kazipara -> Agargaon -> Bijoy Sarani -> Mohakhali / Nabisco / Karwan Bazar',
+        costBdt: 25,
+        waitMins: '4 to 7 mins',
+        bottleneck: 'Heavy signal delays at Agargaon, Bijoy Sarani, and Jahangir Gate.',
+        mapQuery: 'Mirpur+10+Dhaka+to+Bijoy+Sarani+to+Mohakhali+Dhaka',
+        rainMultiplier: 1.55,
+        thursdayMultiplier: 1.45,
+        durations: [35, 38, 40, 43, 46, 48, 50, 53, 56, 60, 64, 68, 74, 80, 86, 92, 98, 105, 112, 120]
+      },
+
+      // 26. UTTARA <-> MIRPUR (10 / 11 / 12)
+      {
+        id: 'utt_mir_metro',
+        corridorId: 'uttara_mirpur10',
+        category: 'public',
+        modeType: 'metro',
+        boardingHubType: 'metro',
+        title: 'Dhaka Metro Rail (MRT Line-6) Direct (Uttara ⇄ Pallabi / Mirpur 10)',
+        busOperators: ['Dhaka Metro MRT-6 (Every 6–8 mins)'],
+        stops: 'Uttara North MRT -> Uttara Center MRT -> Uttara South MRT -> Pallabi MRT -> Mirpur 11 MRT -> Mirpur 10 MRT',
+        costBdt: 40,
+        waitMins: '5 mins platform wait',
+        bottleneck: 'Fastest corridor in Dhaka: reaches Pallabi in 9 mins (৳30) and Mirpur 10 in 14 mins (৳40) with zero traffic!',
+        mapQuery: 'Uttara+North+Metro+Station+to+Pallabi+Metro+Station+to+Mirpur+10+Metro+Station+Dhaka',
+        rainMultiplier: 1.05,
+        thursdayMultiplier: 1.05,
+        durations: [13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 23, 24]
+      },
+      {
+        id: 'utt_mir_bus',
+        corridorId: 'uttara_mirpur10',
+        category: 'public',
+        modeType: 'bus',
+        boardingHubType: 'bus',
+        title: 'Surface Bus via Airport, Kuril & Kalshi Flyover (Basumati / প্রজাপতি / Bihanga)',
+        busOperators: ['Basumati', 'Projapoti', 'Jabale Noor', 'Robrob'],
+        stops: 'House Building -> Airport -> Kuril Flyover -> Matikata -> ECB Chattar -> Kalshi Flyover -> Mirpur 11 / Mirpur 10',
+        costBdt: 30,
+        waitMins: '4 to 7 mins',
+        bottleneck: 'Good option from House Building/Airport road without going into Diabari; slowdowns at Airport and ECB.',
+        mapQuery: 'House+Building+Uttara+to+ECB+Chattar+to+Mirpur+10+Dhaka',
+        rainMultiplier: 1.45,
+        thursdayMultiplier: 1.40,
+        durations: [35, 38, 40, 42, 45, 48, 50, 53, 56, 60, 64, 68, 72, 78, 84, 90, 96, 102, 108, 115]
+      },
+
+      // 27. DHANMONDI / SCIENCE LAB <-> BASHUNDHARA / KURIL / NOTUN BAZAR
+      {
+        id: 'dhm_bash_bus',
+        corridorId: 'dhanmondi_bashundhara',
+        category: 'public',
+        modeType: 'bus',
+        boardingHubType: 'bus',
+        title: 'Bus via Khamarbari, Banani & Kuril (VIP 27 / Bikash / Dewan + Kuril/Notun Bazar)',
+        busOperators: ['Bikash Paribahan', 'VIP 27', 'Dewan', 'BRTC'],
+        stops: 'Science Lab / Dhanmondi 27 -> Khamarbari -> Jahangir Gate -> Banani -> Kuril Bishwa Road -> Bashundhara Gate / Notun Bazar',
+        costBdt: 40,
+        waitMins: '4 to 8 mins',
+        bottleneck: 'High student demand; traffic bottlenecks at Bijoy Sarani, Banani Overpass, and Jamuna Future Park.',
+        mapQuery: 'Dhanmondi+27+Dhaka+to+Banani+to+Jamuna+Future+Park+Dhaka',
+        rainMultiplier: 1.60,
+        thursdayMultiplier: 1.50,
+        durations: [50, 54, 58, 62, 65, 68, 72, 75, 78, 82, 86, 92, 98, 105, 112, 120, 128, 136, 145, 155]
+      },
+      {
+        id: 'dhm_bash_bike',
+        corridorId: 'dhanmondi_bashundhara',
+        category: 'rideshare',
+        modeType: 'rideshare',
+        boardingHubType: 'bus',
+        title: 'Pathao / Uber Bike via Tejgaon / Mohakhali Flyover & Pragati Sarani',
+        busOperators: ['Pathao Bike', 'Uber Moto'],
+        stops: 'Dhanmondi -> Khamarbari -> Mohakhali Flyover -> Banani -> Kuril -> Bashundhara Gate',
+        costBdt: 230,
+        waitMins: '4 mins app pickup',
+        bottleneck: 'Fastest door-to-door university commute during morning rush.',
+        mapQuery: 'Science+Lab+Dhaka+to+Mohakhali+to+Jamuna+Future+Park+Dhaka',
+        rainMultiplier: 1.45,
+        thursdayMultiplier: 1.30,
+        durations: [28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 52, 56, 60, 64, 68, 72, 76, 80, 85]
+      },
+
+      // 28. GABTOLI / SHYAMOLI <-> BASHUNDHARA / KURIL / NOTUN BAZAR
+      {
+        id: 'gab_bash_bus',
+        corridorId: 'gabtoli_bashundhara',
+        category: 'public',
+        modeType: 'bus',
+        boardingHubType: 'bus',
+        title: 'Direct Bus (Robrob / Jabale Noor / Projapoti / Akik)',
+        busOperators: ['Robrob', 'Jabale Noor', 'Projapoti', 'Akik', 'Bhuiyan Paribahan'],
+        stops: 'Gabtoli / Technical -> Kalyanpur / Shyamoli or Mirpur 1 -> Kalshi / ECB Chattar -> Kuril -> Bashundhara Gate -> Notun Bazar',
+        costBdt: 35,
+        waitMins: '4 to 7 mins',
+        bottleneck: 'Technical intersection and Jamuna Future Park U-turn slowdowns.',
+        mapQuery: 'Gabtoli+Dhaka+to+Kalshi+to+Jamuna+Future+Park+Dhaka',
+        rainMultiplier: 1.50,
+        thursdayMultiplier: 1.40,
+        durations: [45, 48, 52, 55, 58, 62, 65, 68, 72, 75, 80, 85, 90, 96, 102, 110, 118, 126, 135, 145]
+      },
+
+      // 29. OLD DHAKA (SADARGHAT / VICTORIA PARK) <-> MOTIJHEEL / DHANMONDI
+      {
+        id: 'old_dhm_bus',
+        corridorId: 'olddhaka_dhanmondi',
+        category: 'public',
+        modeType: 'bus',
+        boardingHubType: 'bus',
+        title: 'Direct City Bus (Savr Paribahan / Thikana / Bahon / Midline)',
+        busOperators: ['Thikana', 'Bahon', 'Midline', 'Malancha', 'Tanjil'],
+        stops: 'Victoria Park / Ray Saheb Bazar -> Gulistan -> Press Club -> Shahbagh -> Science Lab -> Dhanmondi',
+        costBdt: 25,
+        waitMins: '4 to 7 mins',
+        bottleneck: 'Heavy bottlenecks at Ray Saheb Bazar, Gulistan Zero Point, and Shahbagh.',
+        mapQuery: 'Bahadur+Shah+Park+Dhaka+to+Gulistan+to+Shahbagh+to+Science+Lab+Dhaka',
+        rainMultiplier: 1.60,
+        thursdayMultiplier: 1.50,
+        durations: [38, 42, 45, 48, 52, 55, 58, 62, 65, 68, 72, 78, 84, 90, 98, 106, 114, 122, 130, 140]
+      },
+      {
+        id: 'old_dhm_metro',
+        corridorId: 'olddhaka_dhanmondi',
+        category: 'public',
+        modeType: 'metro',
+        boardingHubType: 'metro',
+        title: 'Feeder to Secretariat MRT-6 + Metro to TSC/Shahbagh',
+        busOperators: ['Dhaka Metro MRT-6'],
+        stops: 'Secretariat MRT -> Dhaka University (TSC) MRT -> Shahbagh MRT (10-min rickshaw to Science Lab/Dhanmondi)',
+        costBdt: 20,
+        waitMins: '5 mins platform wait',
+        bottleneck: 'Bypasses Gulistan and Press Club surface gridlock in 5 minutes on the train.',
+        mapQuery: 'Bangladesh+Secretariat+Metro+Station+to+Shahbagh+Metro+Station+Dhaka',
+        rainMultiplier: 1.05,
+        thursdayMultiplier: 1.05,
+        durations: [10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 20, 21]
+      }
             // MIRPUR <-> BASHUNDHARA / BADDA / RAMPURA ROUTES
       {
         id: 'm10_badda_bus',
