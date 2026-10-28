@@ -499,6 +499,30 @@
      * with realistic walking/rickshaw distance & fare—never a bus stand!
      */
     const CORRIDORS = [
+            // MIRPUR 10/11/12/14 <-> BASHUNDHARA / BADDA / RAMPURA
+      {
+        id: 'mirpur_badda_rampura',
+        originShort: 'Mirpur (10 / 11 / 12 / 14)',
+        destShort: 'Bashundhara / Badda / Rampura',
+        label: 'Mirpur (10/11/12) ➔ Bashundhara, Badda & Rampura Bridge',
+        reverseLabel: 'Rampura Bridge / Badda / Bashundhara ➔ Mirpur (10/11/12)',
+        keywords: ['mirpur', 'kalshi', 'bashundhara', 'kuril', 'notun bazar', 'badda', 'merul badda', 'rampura', 'banasree', 'bracu', 'ewu', 'aiub'],
+        subAreas: [
+          { name: 'Mirpur 10 Gol Chattar (Block A/B/C/D)', busHub: 'Mirpur 10 Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Mirpur 11 / Pallabi / Kalshi Flyover', busHub: 'Kalshi Flyover Ramp Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
+          { name: 'Mirpur 11.5 / Ceramic / Purobi', busHub: 'Purobi / Kalshi Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
+          { name: 'Mirpur 12 / Mirpur DOHS / Terminal', busHub: 'Mirpur 12 Bus Terminal', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 12 MRT Station', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
+          { name: 'Mirpur 14 / ECB Chattar', busHub: 'ECB Chattar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 14 Stand (Feeder to Mirpur 10 MRT)', metroWalk: 16, metroRick: 8, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+        ],
+        destSubAreas: [
+          { name: 'Bashundhara Main Gate / Jamuna Future Park', busHub: 'Jamuna Future Park Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Kuril Stand (Bus Feeder to Airport/MRT)', metroWalk: 25, metroRick: 14, metroRickFare: 70, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Notun Bazar / Baridhara J-Block (UIU Shuttle)', busHub: 'Notun Bazar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Notun Bazar Stand', metroWalk: 25, metroRick: 14, metroRickFare: 70, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'North Badda / Shahjadpur / Suvastu', busHub: 'North Badda Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Badda Stand', metroWalk: 28, metroRick: 15, metroRickFare: 75, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Middle Badda / Merul Badda (BRACU / EWU Gate)', busHub: 'Middle / Merul Badda Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Merul Badda Stand', metroWalk: 30, metroRick: 16, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Rampura Bridge / Banasree Main Gate (Block A–D)', busHub: 'Rampura Bridge Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Farmgate MRT Station (via Tejgaon Feeder)', metroWalk: 35, metroRick: 18, metroRickFare: 80, hasLeguna: true, legunaFare: 15, legunaMins: 6 }
+        ]
+      },
+      
       // 1. MIRPUR <-> GULSHAN / BANANI
       {
         id: 'mirpur10_banani',
@@ -949,6 +973,42 @@
      * ROUTE OPTIONS DATASET
      */
     const ROUTES_DATA = [
+            // MIRPUR <-> BASHUNDHARA / BADDA / RAMPURA ROUTES
+      {
+        id: 'm10_badda_bus',
+        corridorId: 'mirpur_badda_rampura',
+        category: 'public',
+        modeType: 'bus',
+        boardingHubType: 'bus',
+        title: 'Direct Bus via Kalshi Flyover & Pragati Sarani (Jabale Noor / Akik / Ochim / Raida)',
+        busOperators: ['Jabale Noor', 'Akik Paribahan', 'Ochim Paribahan', 'Raida', 'Nur E Makkah'],
+        stops: 'Mirpur 10/11/12 -> Kalshi Flyover -> ECB Chattar -> Kuril Bishwa Road -> Jamuna Future Park -> Notun Bazar -> Middle Badda -> Rampura Bridge',
+        costBdt: 35,
+        waitMins: '3 to 6 mins',
+        bottleneck: 'Kalshi Flyover is fast; primary slowdowns occur at Jamuna Future Park U-turn, Notun Bazar signal, and Badda U-loop.',
+        mapQuery: 'Mirpur+10+Dhaka+to+Kalshi+Flyover+to+Jamuna+Future+Park+to+Rampura+Bridge+Dhaka',
+        rainMultiplier: 1.45,
+        thursdayMultiplier: 1.35,
+        durations: [35, 38, 40, 42, 45, 48, 50, 52, 55, 58, 62, 66, 70, 75, 80, 86, 92, 100, 110, 120]
+      },
+      {
+        id: 'm10_badda_bike',
+        corridorId: 'mirpur_badda_rampura',
+        category: 'rideshare',
+        modeType: 'rideshare',
+        boardingHubType: 'bus',
+        title: 'Pathao / Uber Bike via Kalshi Flyover, Kuril & Pragati Sarani',
+        busOperators: ['Pathao Bike', 'Uber Moto'],
+        stops: 'Mirpur -> Kalshi Flyover -> ECB -> Kuril Overpass -> Notun Bazar -> Badda -> Rampura',
+        costBdt: 220,
+        waitMins: '3 to 5 mins app pickup',
+        bottleneck: 'Bypasses bus queues over Kalshi and Kuril flyovers in 25–35 minutes.',
+        mapQuery: 'Mirpur+10+Dhaka+to+ECB+Chattar+to+Notun+Bazar+to+Rampura+Bridge+Dhaka',
+        rainMultiplier: 1.40,
+        thursdayMultiplier: 1.25,
+        durations: [22, 24, 25, 27, 28, 30, 31, 33, 35, 37, 40, 43, 46, 50, 54, 58, 62, 66, 70, 75]
+      },
+      
       // 1. MIRPUR <-> GULSHAN / BANANI
       {
         id: 'm10_ban_bus',
