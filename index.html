@@ -18,7 +18,7 @@
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Browser Tab Favicon & Phone Home Screen Icon using your logo.png -->
+  <!-- Browser Tab Favicon & Phone Home Screen Icon using your logo.png -->
   <link id="faviconLink" rel="icon" type="image/png" href="logo.png" />
   <link id="appleTouchIcon" rel="apple-touch-icon" href="logo.png" />
   <meta name="theme-color" content="#059669" />
@@ -29,37 +29,51 @@
 <body class="text-slate-900 min-h-screen flex flex-col justify-between">
 
   <div>
-    <!-- Top Header -->
+    <!-- Clean, Spacious Top Header -->
     <header class="hero-gradient text-white shadow-lg">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 py-5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <!-- Left: Logo + Title + Subtitle -->
           <div class="flex items-center gap-3.5">
-                        <img 
+            <img 
               src="logo.png" 
               alt="Buffer Dhaka Logo" 
               class="w-11 h-11 rounded-xl object-cover shadow-md border border-emerald-400/30 shrink-0" 
             />
             <div>
-              <div class="flex items-center gap-2.5">
+              <div class="flex items-center gap-2.5 flex-wrap">
                 <h1 class="font-extrabold text-xl sm:text-2xl tracking-tight text-white">Buffer Dhaka</h1>
                 <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-                 A Commute Intelligence
+                  A Commute Intelligence
                 </span>
               </div>
-              <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
-                Less Guesswork • Better Journeys
-              </p>
+              <div class="flex items-center gap-2.5 flex-wrap mt-1">
+                <p class="text-xs sm:text-sm text-slate-300">
+                  Less Guesswork • Better Journeys
+                </p>
+                <!-- Live Dhaka Weather Indicator Badge (Real-Time Station Sync) -->
+                <span 
+                  id="liveWeatherBadge" 
+                  onclick="checkLiveDhakaWeather(true)"
+                  title="Click to refresh live Dhaka weather"
+                  class="hidden cursor-pointer text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-emerald-200 border border-white/15 transition"
+                >
+                  Syncing Dhaka Weather...
+                </span>
+              </div>
             </div>
           </div>
-               <div class="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
-            <button onclick="openModal()" class="inline-flex items-center gap-2 text-xs font-bold bg-white/10 hover:bg-white/20 text-white border border-white/20 px-4 py-2.5 rounded-xl transition backdrop-blur-sm">
-              <svg class="w-4 h-4 text-emerald-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+
+          <!-- Right: Clean Single-Row Action Buttons -->
+          <div class="flex items-center gap-2.5 self-start md:self-auto shrink-0">
+            <button onclick="openModal()" class="inline-flex items-center gap-2 text-xs font-bold bg-white/10 hover:bg-white/20 text-white border border-white/20 px-4 py-2.5 rounded-xl transition backdrop-blur-sm whitespace-nowrap">
+              <svg class="w-4 h-4 text-emerald-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
               </svg>
-              Add Trip Time
+              <span>Add Trip Time</span>
             </button>
 
-            <button id="installAppBtn" onclick="installBufferApp()" class="inline-flex items-center gap-2 text-xs font-extrabold bg-emerald-500 hover:bg-emerald-600 text-white border border-emerald-400/50 px-4 py-2.5 rounded-xl transition shadow-md">
+            <button id="installAppBtn" onclick="installBufferApp()" class="inline-flex items-center gap-2 text-xs font-extrabold bg-emerald-500 hover:bg-emerald-600 text-white border border-emerald-400/50 px-4 py-2.5 rounded-xl transition shadow-md whitespace-nowrap">
               <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
@@ -106,12 +120,12 @@
             </div>
           </div>
 
-          <!-- Corridor Selector + Two-Way Swap Button + Target Arrival Time -->
+          <!-- Corridor Selector + Two-Way Swap Button + Target Arrival / Leave Now Time -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-end">
-            <!-- Corridor Select -->
+            <!-- Corridor Select (Starts Empty Until User Selects) -->
             <div class="lg:col-span-6">
               <div class="flex items-center justify-between mb-1.5">
-                <label class="block text-xs font-bold text-slate-600">Selected Route & Direction</label>
+                <label class="block text-xs font-bold text-slate-600">Select Route & Direction</label>
                 <span id="directionBadge" class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Forward Direction (A ➔ B)</span>
               </div>
               <select id="corridorSelect" onchange="onCorridorChange()" class="w-full bg-slate-50 hover:bg-slate-100/70 border border-slate-300 rounded-xl px-3.5 py-3 text-sm font-bold text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/15 transition cursor-pointer">
@@ -132,14 +146,21 @@
               </button>
             </div>
 
-            <!-- 12-Hour Clock Selector -->
+            <!-- "Arrive By" vs "Leave Now" Mode + 12-Hour Clock Selector -->
             <div class="lg:col-span-4">
-              <div class="flex items-center justify-between mb-1.5">
-                <label class="block text-xs font-bold text-slate-600">Target Arrival Time</label>
-                <span id="rushStatusBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900">Peak Office Rush</span>
+              <div class="flex items-center justify-between mb-1.5 gap-1">
+                <div class="inline-flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                  <button onclick="setTimeMode('arrive')" id="modeArriveBtn" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-700 text-white transition">
+                    Arrive By
+                  </button>
+                  <button onclick="setTimeMode('leave_now')" id="modeLeaveNowBtn" class="px-2 py-0.5 rounded-md text-[10px] font-extrabold text-slate-600 hover:text-slate-900 transition">
+                    ⚡ Leave Now
+                  </button>
+                </div>
+                <span id="rushStatusBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900">Morning Office Rush</span>
               </div>
-              <div class="grid grid-cols-3 gap-2 bg-slate-50 border border-slate-300 rounded-xl p-1.5">
-                <select id="TargetHour12" onchange="renderApp()" class="bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-extrabold text-slate-900 text-center focus:outline-none focus:border-emerald-600 cursor-pointer">
+              <div class="grid grid-cols-3 gap-2 bg-slate-50 border border-slate-300 rounded-xl p-1.5" id="clockSelectorBox">
+                <select id="TargetHour12" onchange="onClockManualChange()" class="bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-extrabold text-slate-900 text-center focus:outline-none focus:border-emerald-600 cursor-pointer">
                   <option value="1">01</option>
                   <option value="2">02</option>
                   <option value="3">03</option>
@@ -153,17 +174,21 @@
                   <option value="11">11</option>
                   <option value="12">12</option>
                 </select>
-                <select id="TargetMinute12" onchange="renderApp()" class="bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-extrabold text-slate-900 text-center focus:outline-none focus:border-emerald-600 cursor-pointer">
+                <select id="TargetMinute12" onchange="onClockManualChange()" class="bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-sm font-extrabold text-slate-900 text-center focus:outline-none focus:border-emerald-600 cursor-pointer">
                   <option value="0" selected>00</option>
+                  <option value="5">05</option>
                   <option value="10">10</option>
                   <option value="15">15</option>
                   <option value="20">20</option>
+                  <option value="25">25</option>
                   <option value="30">30</option>
+                  <option value="35">35</option>
                   <option value="40">40</option>
                   <option value="45">45</option>
                   <option value="50">50</option>
+                  <option value="55">55</option>
                 </select>
-                <select id="TargetPeriod12" onchange="renderApp()" class="bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-2 py-1.5 text-xs font-extrabold text-center focus:outline-none transition cursor-pointer">
+                <select id="TargetPeriod12" onchange="onClockManualChange()" class="bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-2 py-1.5 text-xs font-extrabold text-center focus:outline-none transition cursor-pointer">
                   <option value="AM" selected>AM</option>
                   <option value="PM">PM</option>
                 </select>
@@ -197,7 +222,7 @@
                   Exact Doorstep Starting Point & Feeder Transport
                 </h3>
                 <p class="text-xs text-slate-500 mt-0.5">
-                  Always pairs you with the physically closest Metro Station and Bus Stand—with realistic Dhaka Rickshaw and Shared Leguna fares.
+                  Always pairs you with the physically closest Metro Station (MRT-6) and Bus Stand. Shared Leguna/Auto only appears in areas where it operates.
                 </p>
               </div>
             </div>
@@ -207,6 +232,7 @@
             <div class="md:col-span-5">
               <label class="block text-[11px] font-bold text-slate-600 mb-1" id="startingPointLabel">Your Exact Starting Sector / Block / Gate</label>
               <select id="subAreaSelect" onchange="onSubAreaChange()" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-emerald-600 cursor-pointer">
+                <option value="" disabled selected>— Select a route in Step 1 first —</option>
               </select>
             </div>
 
@@ -214,7 +240,6 @@
               <label class="block text-[11px] font-bold text-slate-600 mb-1">How You Reach the Station / Bus Stand</label>
               <select id="firstMileMode" onchange="renderApp()" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-600 cursor-pointer">
                 <option value="rickshaw" selected>Reserve Rickshaw (Doorstep Pickup)</option>
-                <option value="leguna">Shared Leguna / Auto (৳15 where available)</option>
                 <option value="walk">Walking Directly (৳0)</option>
                 <option value="none">Already at Station / Stand (0m)</option>
               </select>
@@ -238,7 +263,8 @@
             </div>
           </div>
 
-          <div id="hubRoutingPreview" class="text-xs bg-white border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-700 grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div id="hubRoutingPreview" class="text-xs bg-white border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-500">
+            Select a route and starting point above to view your nearest Bus Stand and Metro Station.
           </div>
         </div>
 
@@ -309,6 +335,10 @@
               <input type="checkbox" id="rainToggle" onchange="renderApp()" class="accent-sky-700 rounded" />
               <span>Rain / Waterlogging</span>
             </label>
+            <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-100 hover:bg-amber-50 has-[:checked]:bg-amber-50 has-[:checked]:text-amber-900 has-[:checked]:border-amber-300 border border-slate-200 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 transition">
+              <input type="checkbox" id="fridayScheduleToggle" onchange="renderApp()" class="accent-amber-600 rounded" />
+              <span>Friday Schedule</span>
+            </label>
             <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-100 hover:bg-rose-50 has-[:checked]:bg-rose-50 has-[:checked]:text-rose-900 has-[:checked]:border-rose-300 border border-slate-200 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 transition">
               <input type="checkbox" id="thursdayToggle" onchange="renderApp()" class="accent-rose-700 rounded" />
               <span>Thursday Peak Rush</span>
@@ -318,15 +348,15 @@
 
       </section>
 
-      <!-- TOP ACTIVE RECOMMENDATION BANNER -->
-      <section id="recommendationSummary" class="recommend-gradient rounded-2xl p-5 sm:p-6 text-white shadow-lg"></section>
+      <!-- TOP ACTIVE RECOMMENDATION BANNER (Hidden until user selects a route) -->
+      <section id="recommendationSummary" class="hidden recommend-gradient rounded-2xl p-5 sm:p-6 text-white shadow-lg"></section>
 
-      <!-- COMPARED ROUTE CARDS (WITH WORKING GOOGLE MAPS PREVIEW) -->
+      <!-- COMPARED ROUTE CARDS SECTION -->
       <section class="space-y-3.5">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1">
+        <div id="routesHeaderBar" class="hidden flex-col sm:flex-row sm:items-center justify-between gap-1 px-1">
           <div>
             <h2 class="text-sm font-extrabold uppercase tracking-wider text-slate-700">
-              Click Any Route Below for Step-by-Step Stops & Live Google Maps Preview
+              Click Any Route Below for Step-by-Step Stops, Budget Calculator & Live Google Map
             </h2>
             <p class="text-xs text-slate-500">Compare travel time, safety buffer, total fare, and preview the exact route on Google Maps.</p>
           </div>
@@ -339,7 +369,7 @@
     </main>
   </div>
 
-   <!-- FOOTER WITH LOGO, SHARE BUTTON & MUNTASIR ISLAM LINKEDIN CREDIT -->
+  <!-- FOOTER WITH LOGO, SHARE BUTTON & MUNTASIR ISLAM LINKEDIN CREDIT -->
   <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 py-8 mt-auto">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
       <!-- Left: Logo + Brand Description -->
@@ -412,19 +442,61 @@
     </div>
   </div>
 
+  <!-- Share Options Sheet (Appears if native OS Share Sheet isn't supported on desktop) -->
+  <div id="shareSheetModal" onclick="closeShareSheet()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+    <div onclick="event.stopPropagation()" class="bg-white border border-slate-200 rounded-t-3xl sm:rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <img src="logo.png" alt="Buffer Dhaka" class="w-8 h-8 rounded-lg object-cover" />
+          <div>
+            <h3 class="font-extrabold text-sm text-slate-900" id="shareModalTitle">Sharing text</h3>
+            <p class="text-[11px] text-slate-500">Choose how you want to share</p>
+          </div>
+        </div>
+        <button onclick="closeShareSheet()" class="text-slate-400 hover:text-slate-700 text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100">✕</button>
+      </div>
+
+      <div id="shareModalPreview" class="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-xl p-3 whitespace-pre-line max-h-28 overflow-y-auto"></div>
+
+      <div class="grid grid-cols-4 gap-2.5 pt-1 text-center text-[11px] font-bold text-slate-700">
+        <a id="shareWhatsAppLink" href="#" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-emerald-50 border border-slate-200/80 transition">
+          <span class="w-10 h-10 rounded-full bg-[#25D366] text-white flex items-center justify-center text-base font-extrabold shadow-sm">W</span>
+          <span>WhatsApp</span>
+        </a>
+        <a id="shareTelegramLink" href="#" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-sky-50 border border-slate-200/80 transition">
+          <span class="w-10 h-10 rounded-full bg-[#229ED9] text-white flex items-center justify-center text-base font-extrabold shadow-sm">T</span>
+          <span>Telegram</span>
+        </a>
+        <a id="shareLinkedInLink" href="#" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-blue-50 border border-slate-200/80 transition">
+          <span class="w-10 h-10 rounded-full bg-[#0A66C2] text-white flex items-center justify-center text-base font-extrabold shadow-sm">in</span>
+          <span>LinkedIn</span>
+        </a>
+        <a id="shareEmailLink" href="#" class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl hover:bg-slate-100 border border-slate-200/80 transition">
+          <span class="w-10 h-10 rounded-full bg-slate-700 text-white flex items-center justify-center text-base font-extrabold shadow-sm">✉</span>
+          <span>Email</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- COMPLETE APPLICATION ENGINE -->
-  <script>// --- Supabase Cloud Database Configuration ---
-const SUPABASE_URL = 'https://bgytmaeijghkgrvdckam.supabase.co'; // Replace with your Project URL
-const SUPABASE_ANON_KEY = 'sb_publishable_oRlKp1xnsuCTsJsAk3OWXQ_nMzbU8Kl';           // Replace with your anon public key
-const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  <script>
+    // --- Supabase Cloud Database Configuration ---
+    const SUPABASE_URL = 'https://bgytmaeijghkgrvdckam.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_oRlKp1xnsuCTsJsAk3OWXQ_nMzbU8Kl';
+    const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
     let currentPreference = 'balanced';
     let currentStakes = 'important';
     let selectedRouteId = null;
     let isReversedDirection = false;
+    let currentTimeMode = 'arrive'; // 'arrive' | 'leave_now'
+    let userMonthlyDays = '';       // Stores user-entered working days (empty by default)
 
     /**
      * EXPANDED DHAKA CORRIDOR DATASET (22 Major Corridors = 44 Two-Way Directions)
-     * Loaded with comprehensive exact doorstep starting locations across both ends.
+     * EVERY SINGLE `metroHub` is strictly verified to point to one of the 16 real Dhaka Metro Rail (MRT Line-6) stations
+     * with realistic walking/rickshaw distance & fare—never a bus stand!
      */
     const CORRIDORS = [
       // 1. MIRPUR <-> GULSHAN / BANANI
@@ -436,25 +508,25 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Gulshan / Banani / Mohakhali ➔ Mirpur (10/11/12/14)',
         keywords: ['mirpur', 'gulshan', 'banani', 'kakoli', 'mohakhali', 'ecb', 'kalshi', 'pallabi', 'kazipara'],
         subAreas: [
-          { name: 'Mirpur 10 Gol Chattar (Block A/B/C/D)', busHub: 'Mirpur 10 Roundabout Stand', busWalk: 5, busRick: 3, busRickFare: 30, metroHub: 'Mirpur 10 Stand (Direct Matikata Bus)', metroWalk: 5, metroRick: 3, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Mirpur 10 Gol Chattar (Block A/B/C/D)', busHub: 'Mirpur 10 Roundabout Stand', busWalk: 5, busRick: 3, busRickFare: 30, metroHub: 'Mirpur 10 MRT Station', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
           { name: 'Mirpur 10 Benarashi Palli / Section 10', busHub: 'Mirpur 10 Gol Chattar Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 10 MRT Station', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Mirpur 11 / Pallabi / Kalshi Flyover', busHub: 'Kalshi Flyover Ramp Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Kalshi Ramp Stand', metroWalk: 7, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Mirpur 11.5 / Ceramic / Purobi', busHub: 'Purobi / Kalshi Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Mirpur 12 / DOHS Gate / Bus Terminal', busHub: 'Mirpur 12 Bus Terminal', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 12 Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Mirpur 12 Section E / Eastern Housing', busHub: 'Mirpur 12 Bus Stand', busWalk: 12, busRick: 6, busRickFare: 35, metroHub: 'Mirpur 12 Stand', metroWalk: 12, metroRick: 6, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
-          { name: 'Mirpur 14 / Police Lines / Dental College', busHub: 'Mirpur 14 Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 14 Bus Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Mirpur 13 / Nam Garden / BADC', busHub: 'Mirpur 14 / 10 Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 10 Stand', metroWalk: 10, metroRick: 5, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'ECB Chattar / Manikdi / Matikata', busHub: 'ECB Chattar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'ECB Chattar Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Kazipara / Shewrapara (Begum Rokeya Sarani)', busHub: 'Mirpur 10 / Kochukhet Stand', busWalk: 14, busRick: 7, busRickFare: 40, metroHub: 'Mirpur 10 Stand', metroWalk: 14, metroRick: 7, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Mirpur 11 / Pallabi / Kalshi Flyover', busHub: 'Kalshi Flyover Ramp Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 11 / Pallabi MRT Station', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
+          { name: 'Mirpur 11.5 / Ceramic / Purobi', busHub: 'Purobi / Kalshi Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station', metroWalk: 6, metroRick: 4, metroRickFare: 25, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
+          { name: 'Mirpur 12 / DOHS Gate / Bus Terminal', busHub: 'Mirpur 12 Bus Terminal', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station (Closest)', metroWalk: 12, metroRick: 6, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Mirpur 12 Section E / Eastern Housing', busHub: 'Mirpur 12 Bus Stand', busWalk: 12, busRick: 6, busRickFare: 35, metroHub: 'Pallabi MRT Station', metroWalk: 16, metroRick: 8, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 6 },
+          { name: 'Mirpur 14 / Police Lines / Dental College', busHub: 'Mirpur 14 Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station (Closest)', metroWalk: 18, metroRick: 9, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 6 },
+          { name: 'Mirpur 13 / Nam Garden / BADC', busHub: 'Mirpur 14 / 10 Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 10 MRT Station', metroWalk: 12, metroRick: 6, metroRickFare: 35, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'ECB Chattar / Manikdi / Matikata', busHub: 'ECB Chattar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 / Pallabi MRT Station', metroWalk: 28, metroRick: 13, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
+          { name: 'Kazipara / Shewrapara (Begum Rokeya Sarani)', busHub: 'Mirpur 10 / Kochukhet Stand', busWalk: 14, busRick: 7, busRickFare: 40, metroHub: 'Kazipara / Shewrapara MRT Station', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ],
         destSubAreas: [
-          { name: 'Gulshan 2 Circle / Gulshan Ave', busHub: 'Kakoli / Banani Bus Stand', busWalk: 15, busRick: 7, busRickFare: 40, metroHub: 'Kakoli Bus Stand', metroWalk: 15, metroRick: 7, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Gulshan 1 Circle / South Ave / DCC Market', busHub: 'Mohakhali / Kakoli Bus Stand', busWalk: 18, busRick: 9, busRickFare: 50, metroHub: 'Kakoli Bus Stand', metroWalk: 18, metroRick: 9, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
-          { name: 'Banani Road 11 / Kemal Ataturk Ave', busHub: 'Kakoli / Banani Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Kakoli Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Banani Block B / C / F (Residential)', busHub: 'Kakoli Bus Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Kakoli Stand', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Kakoli / Chairman Bari Overpass', busHub: 'Kakoli Bus Stand', busWalk: 3, busRick: 2, busRickFare: 20, metroHub: 'Kakoli Stand', metroWalk: 3, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Mohakhali DOHS / Amtoli / TB Gate', busHub: 'Amtoli / Kakoli Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Kakoli Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Mohakhali Wireless Gate / Bir Uttam AK Khandakar', busHub: 'Amtoli Bus Stand', busWalk: 9, busRick: 5, busRickFare: 35, metroHub: 'Amtoli Stand', metroWalk: 9, metroRick: 5, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+          { name: 'Gulshan 2 Circle / Gulshan Ave', busHub: 'Kakoli / Banani Bus Stand', busWalk: 15, busRick: 7, busRickFare: 40, metroHub: 'Bijoy Sarani / Farmgate MRT Station (Feeder Required)', metroWalk: 40, metroRick: 18, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Gulshan 1 Circle / South Ave / DCC Market', busHub: 'Mohakhali / Kakoli Bus Stand', busWalk: 18, busRick: 9, busRickFare: 50, metroHub: 'Farmgate / Karwan Bazar MRT Station (Feeder Required)', metroWalk: 36, metroRick: 16, metroRickFare: 70, hasLeguna: true, legunaFare: 15, legunaMins: 12 },
+          { name: 'Banani Road 11 / Kemal Ataturk Ave', busHub: 'Kakoli / Banani Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Bijoy Sarani MRT Station (Feeder Required)', metroWalk: 32, metroRick: 15, metroRickFare: 70, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Banani Block B / C / F (Residential)', busHub: 'Kakoli Bus Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Bijoy Sarani MRT Station (Feeder Required)', metroWalk: 34, metroRick: 16, metroRickFare: 70, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Kakoli / Chairman Bari Overpass', busHub: 'Kakoli Bus Stand', busWalk: 3, busRick: 2, busRickFare: 20, metroHub: 'Bijoy Sarani / Agargaon MRT Station (Feeder Required)', metroWalk: 30, metroRick: 14, metroRickFare: 65, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Mohakhali DOHS / Amtoli / TB Gate', busHub: 'Amtoli / Kakoli Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Bijoy Sarani MRT Station (Closest)', metroWalk: 24, metroRick: 11, metroRickFare: 50, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Mohakhali Wireless Gate / Bir Uttam AK Khandakar', busHub: 'Amtoli Bus Stand', busWalk: 9, busRick: 5, busRickFare: 35, metroHub: 'Bijoy Sarani / Farmgate MRT Station', metroWalk: 28, metroRick: 13, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 9 }
         ]
       },
 
@@ -474,7 +546,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
           { name: 'Uttara Sector 3 / Sector 4 (Rajlakshmi)', busHub: 'Rajlakshmi / Azampur Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Uttara South MRT Station (Closest)', metroWalk: 20, metroRick: 10, metroRickFare: 60, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
           { name: 'Uttara Sector 5 / Sector 6 (Near Azampur)', busHub: 'Azampur Bus Stand', busWalk: 6, busRick: 4, busRickFare: 25, metroHub: 'Uttara North / South MRT Station', metroWalk: 22, metroRick: 11, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
           { name: 'Uttara Sector 1 / Jasimuddin / Airport', busHub: 'Jasimuddin / Kawla Ramp Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Uttara South MRT Station', metroWalk: 24, metroRick: 12, metroRickFare: 65, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Uttara Sector 15 / 16 / 18 (Diabari)', busHub: 'House Building Stand', busWalk: 32, busRick: 16, busRickFare: 70, metroHub: 'Uttara North / Center MRT (Doorstep)', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Uttara Sector 15 / 16 / 18 (Diabari)', busHub: 'House Building Stand', busWalk: 32, busRick: 16, busRickFare: 70, metroHub: 'Uttara North / Center MRT Station (Doorstep)', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
           { name: 'Dakshin Khan / Faidabad / Ashkona', busHub: 'Azampur / Airport Stand', busWalk: 18, busRick: 9, busRickFare: 45, metroHub: 'Uttara South MRT Station', metroWalk: 28, metroRick: 14, metroRickFare: 65, hasLeguna: true, legunaFare: 20, legunaMins: 10 }
         ],
         destSubAreas: [
@@ -482,7 +554,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
           { name: 'Green Road / Panthapath / Square Hospital', busHub: 'Farmgate Bus Stand', busWalk: 10, busRick: 5, busRickFare: 35, metroHub: 'Farmgate / Karwan Bazar MRT Station', metroWalk: 9, metroRick: 5, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
           { name: 'Karwan Bazar / Bashundhara City Mall', busHub: 'Karwan Bazar Bus Stop', busWalk: 6, busRick: 3, busRickFare: 25, metroHub: 'Karwan Bazar MRT Station', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
           { name: 'Bijoy Sarani / Monipuripara / Khamarbari', busHub: 'Khamarbari / Farmgate Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Bijoy Sarani / Farmgate MRT Station', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Tejgaon Industrial Area / Nabisco Link Road', busHub: 'Farmgate / Nabisco Stand', busWalk: 12, busRick: 6, busRickFare: 35, metroHub: 'Farmgate MRT Station', metroWalk: 14, metroRick: 7, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+          { name: 'Tejgaon Industrial Area / Nabisco Link Road', busHub: 'Farmgate / Nabisco Stand', busWalk: 12, busRick: 6, busRickFare: 35, metroHub: 'Farmgate / Karwan Bazar MRT Station', metroWalk: 14, metroRick: 7, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
         ]
       },
 
@@ -498,13 +570,13 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
           { name: 'Uttara Sector 7 / House Building / BNS', busHub: 'House Building Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Uttara North MRT Station (Diabari)', metroWalk: 24, metroRick: 12, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 10 },
           { name: 'Uttara Sector 11 / Sector 13', busHub: 'House Building Stand', busWalk: 18, busRick: 9, busRickFare: 50, metroHub: 'Uttara Center MRT Station (Closest)', metroWalk: 10, metroRick: 5, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
           { name: 'Uttara Sector 3 / Sector 4 (Rajlakshmi)', busHub: 'Rajlakshmi Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Uttara South MRT Station', metroWalk: 20, metroRick: 10, metroRickFare: 60, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Uttara Sector 12 / Sector 14', busHub: 'House Building Stand', busWalk: 20, busRick: 10, busRickFare: 50, metroHub: 'Uttara North / Center MRT', metroWalk: 9, metroRick: 5, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+          { name: 'Uttara Sector 12 / Sector 14', busHub: 'House Building Stand', busWalk: 20, busRick: 10, busRickFare: 50, metroHub: 'Uttara North / Center MRT Station', metroWalk: 9, metroRick: 5, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
         ],
         destSubAreas: [
-          { name: 'Dhanmondi 27 / Rapa Plaza / Asad Gate', busHub: 'Dhanmondi 27 / Asad Gate Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Farmgate MRT (via Khamarbari Leguna)', metroWalk: 16, metroRick: 8, metroRickFare: 45, hasLeguna: true, legunaFare: 15, legunaMins: 6 },
+          { name: 'Dhanmondi 27 / Rapa Plaza / Asad Gate', busHub: 'Dhanmondi 27 / Asad Gate Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Farmgate MRT Station (via Khamarbari Leguna)', metroWalk: 16, metroRick: 8, metroRickFare: 45, hasLeguna: true, legunaFare: 15, legunaMins: 6 },
           { name: 'Satmasjid Road / Dhanmondi 9A / Shankar', busHub: 'Shankar / Dhanmondi 27 Stand', busWalk: 8, busRick: 5, busRickFare: 35, metroHub: 'Farmgate MRT Station', metroWalk: 22, metroRick: 11, metroRickFare: 55, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
           { name: 'Dhanmondi 15 / Road 8 / Zigatola Bus Stand', busHub: 'Dhanmondi 15 / Zigatola Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Shahbagh MRT Station', metroWalk: 24, metroRick: 12, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
-          { name: 'Science Lab / Kalabagan / City College', busHub: 'Science Lab / Kalabagan Stop', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Shahbagh / TSC MRT Station (Closest)', metroWalk: 15, metroRick: 7, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Science Lab / Kalabagan / City College', busHub: 'Science Lab / Kalabagan Stop', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Shahbagh / Dhaka University (TSC) MRT Station', metroWalk: 15, metroRick: 7, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ]
       },
 
@@ -517,15 +589,15 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Banani / Gulshan-2 / Mohakhali ➔ Airport & Uttara',
         keywords: ['uttara', 'airport', 'khilkhet', 'nikunja', 'banani', 'kakoli', 'gulshan', 'mohakhali'],
         subAreas: [
-          { name: 'Uttara Sector 7 / House Building / BNS', busHub: 'House Building Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'House Building Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Uttara Sector 3 / Sector 4 / Rajlakshmi', busHub: 'Rajlakshmi Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Rajlakshmi Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Uttara Sector 11 / Sector 13', busHub: 'House Building Stand', busWalk: 18, busRick: 9, busRickFare: 50, metroHub: 'House Building Stand', metroWalk: 18, metroRick: 9, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 6 },
-          { name: 'Airport / Nikunja-2 / Khilkhet', busHub: 'Airport / Khilkhet Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Khilkhet Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Uttara Sector 7 / House Building / BNS', busHub: 'House Building Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Uttara North MRT Station (Diabari)', metroWalk: 24, metroRick: 12, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 10 },
+          { name: 'Uttara Sector 3 / Sector 4 / Rajlakshmi', busHub: 'Rajlakshmi Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Uttara South MRT Station', metroWalk: 20, metroRick: 10, metroRickFare: 60, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Uttara Sector 11 / Sector 13', busHub: 'House Building Stand', busWalk: 18, busRick: 9, busRickFare: 50, metroHub: 'Uttara Center MRT Station (Closest)', metroWalk: 10, metroRick: 5, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Airport / Nikunja-2 / Khilkhet', busHub: 'Airport / Khilkhet Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Uttara South MRT Station (Feeder Required)', metroWalk: 28, metroRick: 14, metroRickFare: 70, hasLeguna: true, legunaFare: 20, legunaMins: 10 }
         ],
         destSubAreas: [
-          { name: 'Banani Road 11 / Kakoli Overpass', busHub: 'Banani / Kakoli Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Banani Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Gulshan 2 Circle / Gulshan Ave', busHub: 'Banani / Kakoli Bus Stand', busWalk: 14, busRick: 7, busRickFare: 40, metroHub: 'Kakoli Stand', metroWalk: 14, metroRick: 7, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Gulshan 1 / Mohakhali Amtoli', busHub: 'Mohakhali / Amtoli Bus Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Mohakhali Stand', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+          { name: 'Banani Road 11 / Kakoli Overpass', busHub: 'Banani / Kakoli Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Bijoy Sarani MRT Station (Feeder Required)', metroWalk: 32, metroRick: 15, metroRickFare: 70, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Gulshan 2 Circle / Gulshan Ave', busHub: 'Banani / Kakoli Bus Stand', busWalk: 14, busRick: 7, busRickFare: 40, metroHub: 'Bijoy Sarani / Farmgate MRT Station (Feeder Required)', metroWalk: 40, metroRick: 18, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Gulshan 1 / Mohakhali Amtoli', busHub: 'Mohakhali / Amtoli Bus Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Bijoy Sarani MRT Station (Closest)', metroWalk: 26, metroRick: 12, metroRickFare: 55, hasLeguna: true, legunaFare: 15, legunaMins: 8 }
         ]
       },
 
@@ -565,7 +637,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
           { name: 'Kazipara / Shewrapara', busHub: 'Kazipara / Shewrapara Bus Stop', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Kazipara / Shewrapara MRT Station', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ],
         destSubAreas: [
-          { name: 'Dhanmondi 27 / Rapa Plaza / Asad Gate', busHub: 'Dhanmondi 27 / Asad Gate Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Farmgate MRT (via Khamarbari Leguna)', metroWalk: 15, metroRick: 7, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Dhanmondi 27 / Rapa Plaza / Asad Gate', busHub: 'Dhanmondi 27 / Asad Gate Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Farmgate MRT Station (via Khamarbari Leguna)', metroWalk: 15, metroRick: 7, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
           { name: 'Kalabagan / Science Lab / City College', busHub: 'Kalabagan / Science Lab Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Shahbagh / Farmgate MRT Station', metroWalk: 15, metroRick: 7, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ]
       },
@@ -586,8 +658,8 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         ],
         destSubAreas: [
           { name: 'Motijheel Shapla Chattar / Dilkusha', busHub: 'Motijheel Bus Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Motijheel MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Secretariat / Press Club / Paltan', busHub: 'Paltan Bus Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Secretariat MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Gulistan Zero Point / Baitul Mukarram', busHub: 'Gulistan Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Secretariat MRT Station (Closest)', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Secretariat / Press Club / Paltan', busHub: 'Paltan Bus Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Bangladesh Secretariat MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Gulistan Zero Point / Baitul Mukarram', busHub: 'Gulistan Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Bangladesh Secretariat MRT Station (Closest)', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ]
       },
 
@@ -600,16 +672,16 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Bashundhara / Kuril / Notun Bazar ➔ Mirpur 10 / 11 / 12',
         keywords: ['mirpur', 'bashundhara', 'kuril', 'jamuna future park', 'notun bazar', 'aiub', 'nsu', 'iub', 'kalshi'],
         subAreas: [
-          { name: 'Mirpur 10 Gol Chattar', busHub: 'Mirpur 10 Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Mirpur 11 / Pallabi / Kalshi Flyover', busHub: 'Kalshi Ramp Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Kalshi Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Mirpur 12 / Mirpur DOHS', busHub: 'Mirpur 12 Terminal', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 12 Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Mirpur 14 / ECB Chattar', busHub: 'ECB Chattar Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'ECB Chattar Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Mirpur 10 Gol Chattar', busHub: 'Mirpur 10 Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Mirpur 11 / Pallabi / Kalshi Flyover', busHub: 'Kalshi Ramp Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi / Mirpur 11 MRT Station', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
+          { name: 'Mirpur 12 / Mirpur DOHS', busHub: 'Mirpur 12 Terminal', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi MRT Station (Closest)', metroWalk: 12, metroRick: 6, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Mirpur 14 / ECB Chattar', busHub: 'ECB Chattar Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station', metroWalk: 18, metroRick: 9, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 6 }
         ],
         destSubAreas: [
-          { name: 'Bashundhara Gate / Jamuna Future Park (NSU/IUB)', busHub: 'Jamuna Future Park Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Bashundhara Gate Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Bashundhara R/A Internal (Blocks C/D/E/F/I)', busHub: 'Bashundhara Main Gate Stand', busWalk: 20, busRick: 10, busRickFare: 50, metroHub: 'Bashundhara Gate Stand', metroWalk: 20, metroRick: 10, metroRickFare: 50, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Kuril Bishwa Road / AIUB', busHub: 'Kuril Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Kuril Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Notun Bazar / 100 Feet / UIU Shuttle Point', busHub: 'Notun Bazar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Notun Bazar Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+          { name: 'Bashundhara Gate / Jamuna Future Park (NSU/IUB)', busHub: 'Jamuna Future Park Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi / Uttara South MRT Station (Feeder via Kalshi/Airport)', metroWalk: 45, metroRick: 20, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Bashundhara R/A Internal (Blocks C/D/E/F/I)', busHub: 'Bashundhara Main Gate Stand', busWalk: 20, busRick: 10, busRickFare: 50, metroHub: 'Pallabi / Uttara South MRT Station (Feeder Required)', metroWalk: 55, metroRick: 25, metroRickFare: 100, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Kuril Bishwa Road / AIUB', busHub: 'Kuril Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Uttara South / Pallabi MRT Station (Feeder Required)', metroWalk: 40, metroRick: 18, metroRickFare: 75, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Notun Bazar / 100 Feet / UIU Shuttle Point', busHub: 'Notun Bazar Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Pallabi / Karwan Bazar MRT Station (Feeder Required)', metroWalk: 45, metroRick: 22, metroRickFare: 90, hasLeguna: true, legunaFare: 15, legunaMins: 12 }
         ]
       },
 
@@ -622,14 +694,14 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Jatrabari / Malibagh / Rampura ➔ Badda, Bashundhara & Kuril',
         keywords: ['kuril', 'bashundhara', 'badda', 'rampura', 'banasree', 'malibagh', 'mugda', 'sayedabad', 'jatrabari', 'notun bazar', 'aftabnagar'],
         subAreas: [
-          { name: 'Bashundhara Gate / Jamuna Future Park', busHub: 'Jamuna Future Park Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Bashundhara Gate Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Notun Bazar / North Badda', busHub: 'Notun Bazar / North Badda Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Notun Bazar Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Middle Badda / Merul Badda (BRACU / EWU)', busHub: 'Middle / Merul Badda Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Merul Badda Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Bashundhara Gate / Jamuna Future Park', busHub: 'Jamuna Future Park Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Pallabi / Uttara South MRT Station (Feeder Required)', metroWalk: 45, metroRick: 20, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Notun Bazar / North Badda', busHub: 'Notun Bazar / North Badda Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Karwan Bazar / Farmgate MRT Station (Feeder Required)', metroWalk: 42, metroRick: 20, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Middle Badda / Merul Badda (BRACU / EWU)', busHub: 'Middle / Merul Badda Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Karwan Bazar MRT Station (via Hatirjheel/Rampura)', metroWalk: 35, metroRick: 16, metroRickFare: 70, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ],
         destSubAreas: [
-          { name: 'Jatrabari Intersection / Kajla', busHub: 'Jatrabari Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Jatrabari Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Sayedabad / Mugda / Maniknagar', busHub: 'Mugda / Sayedabad Stop', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Mugda Stop', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
-          { name: 'Malibagh Railgate / Rampura Banasree', busHub: 'Rampura Bridge / Malibagh Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Rampura Stand', metroWalk: 7, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+          { name: 'Jatrabari Intersection / Kajla', busHub: 'Jatrabari Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Motijheel MRT Station (Closest)', metroWalk: 24, metroRick: 11, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 9 },
+          { name: 'Sayedabad / Mugda / Maniknagar', busHub: 'Mugda / Sayedabad Stop', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Motijheel MRT Station (Closest)', metroWalk: 18, metroRick: 8, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 7 },
+          { name: 'Malibagh Railgate / Rampura Banasree', busHub: 'Rampura Bridge / Malibagh Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Karwan Bazar / Motijheel MRT Station (Feeder Required)', metroWalk: 28, metroRick: 14, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 9 }
         ]
       },
 
@@ -642,15 +714,15 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Banani / Gulshan-2 / Mohakhali ➔ Dhanmondi / Lalmatia',
         keywords: ['dhanmondi', 'lalmatia', 'kalabagan', 'panthapath', 'banani', 'gulshan', 'mohakhali', 'asad gate'],
         subAreas: [
-          { name: 'Dhanmondi 27 / Rapa Plaza / Asad Gate', busHub: 'Asad Gate / Dhanmondi 27 Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Asad Gate Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Dhanmondi Satmasjid Road (Road 9A / Shankar)', busHub: 'Dhanmondi 27 Stand', busWalk: 12, busRick: 6, busRickFare: 35, metroHub: 'Dhanmondi 27 Stand', metroWalk: 12, metroRick: 6, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
-          { name: 'Kalabagan / Dhanmondi 7 / 8', busHub: 'Kalabagan Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Kalabagan Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Lalmatia (Block A–G)', busHub: 'Asad Gate Bus Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Asad Gate Stand', metroWalk: 7, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Dhanmondi 27 / Rapa Plaza / Asad Gate', busHub: 'Asad Gate / Dhanmondi 27 Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Farmgate / Bijoy Sarani MRT Station (Closest)', metroWalk: 15, metroRick: 7, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Dhanmondi Satmasjid Road (Road 9A / Shankar)', busHub: 'Dhanmondi 27 Stand', busWalk: 12, busRick: 6, busRickFare: 35, metroHub: 'Farmgate MRT Station (via Khamarbari)', metroWalk: 22, metroRick: 10, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 7 },
+          { name: 'Kalabagan / Dhanmondi 7 / 8', busHub: 'Kalabagan Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Farmgate / Karwan Bazar MRT Station', metroWalk: 15, metroRick: 7, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Lalmatia (Block A–G)', busHub: 'Asad Gate Bus Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Farmgate / Bijoy Sarani MRT Station', metroWalk: 18, metroRick: 8, metroRickFare: 45, hasLeguna: true, legunaFare: 15, legunaMins: 6 }
         ],
         destSubAreas: [
-          { name: 'Banani Road 11 / Kakoli Stand', busHub: 'Banani / Kakoli Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Banani Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Gulshan 2 Circle', busHub: 'Banani / Kakoli Bus Stand', busWalk: 15, busRick: 7, busRickFare: 40, metroHub: 'Banani Stand', metroWalk: 15, metroRick: 7, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Gulshan 1 / Mohakhali Amtoli', busHub: 'Mohakhali Amtoli Stand', busWalk: 8, busRick: 5, busRickFare: 35, metroHub: 'Mohakhali Stand', metroWalk: 8, metroRick: 5, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+          { name: 'Banani Road 11 / Kakoli Stand', busHub: 'Banani / Kakoli Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Bijoy Sarani MRT Station (Feeder Required)', metroWalk: 32, metroRick: 15, metroRickFare: 70, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Gulshan 2 Circle', busHub: 'Banani / Kakoli Bus Stand', busWalk: 15, busRick: 7, busRickFare: 40, metroHub: 'Bijoy Sarani / Farmgate MRT Station (Feeder Required)', metroWalk: 40, metroRick: 18, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Gulshan 1 / Mohakhali Amtoli', busHub: 'Mohakhali Amtoli Stand', busWalk: 8, busRick: 5, busRickFare: 35, metroHub: 'Bijoy Sarani MRT Station (Closest)', metroWalk: 26, metroRick: 12, metroRickFare: 55, hasLeguna: true, legunaFare: 15, legunaMins: 8 }
         ]
       },
 
@@ -669,7 +741,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         ],
         destSubAreas: [
           { name: 'Motijheel Shapla Chattar / Dilkusha', busHub: 'Motijheel Stand', busWalk: 4, busRick: 2, busRickFare: 20, metroHub: 'Motijheel MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Paltan / Press Club / Secretariat', busHub: 'Paltan Bus Stand', busWalk: 4, busRick: 2, busRickFare: 20, metroHub: 'Secretariat MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Paltan / Press Club / Secretariat', busHub: 'Paltan Bus Stand', busWalk: 4, busRick: 2, busRickFare: 20, metroHub: 'Bangladesh Secretariat MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ]
       },
 
@@ -682,9 +754,9 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Motijheel / Shahbagh / Science Lab ➔ Mohammadpur',
         keywords: ['mohammadpur', 'bosila', 'adabor', 'shia masjid', 'town hall', 'science lab', 'shahbagh', 'motijheel'],
         subAreas: [
-          { name: 'Mohammadpur Bus Stand (Allah Karim)', busHub: 'Mohammadpur Terminal', busWalk: 3, busRick: 2, busRickFare: 20, metroHub: 'Farmgate MRT (via Khamarbari Leguna)', metroWalk: 25, metroRick: 12, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 10 },
-          { name: 'Town Hall / Tajmahal Road / Lalmatia', busHub: 'Mohammadpur / Town Hall Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Farmgate MRT (via Khamarbari Leguna)', metroWalk: 22, metroRick: 10, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 9 },
-          { name: 'Bosila / Mohammadia Housing', busHub: 'Mohammadpur Bus Stand', busWalk: 18, busRick: 9, busRickFare: 45, metroHub: 'Farmgate MRT Station', metroWalk: 35, metroRick: 18, metroRickFare: 80, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
+          { name: 'Mohammadpur Bus Stand (Allah Karim)', busHub: 'Mohammadpur Terminal', busWalk: 3, busRick: 2, busRickFare: 20, metroHub: 'Farmgate MRT Station (via Khamarbari Leguna)', metroWalk: 25, metroRick: 12, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 10 },
+          { name: 'Town Hall / Tajmahal Road / Lalmatia', busHub: 'Mohammadpur / Town Hall Stand', busWalk: 7, busRick: 4, busRickFare: 30, metroHub: 'Farmgate MRT Station (via Khamarbari Leguna)', metroWalk: 22, metroRick: 10, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 9 },
+          { name: 'Bosila / Mohammadia Housing', busHub: 'Mohammadpur Bus Stand', busWalk: 18, busRick: 9, busRickFare: 45, metroHub: 'Farmgate MRT Station', metroWalk: 35, metroRick: 18, metroRickFare: 80, hasLeguna: true, legunaFare: 15, legunaMins: 11 },
           { name: 'Shia Masjid / Japan Garden City / Adabor', busHub: 'Mohammadpur / Shia Masjid Stand', busWalk: 10, busRick: 5, busRickFare: 35, metroHub: 'Agargaon MRT Station (Closest)', metroWalk: 20, metroRick: 10, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 8 }
         ],
         destSubAreas: [
@@ -703,13 +775,13 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Banani / Mohakhali ➔ Shyamoli, Adabor & Mohammadpur',
         keywords: ['mohammadpur', 'adabor', 'shyamoli', 'shia masjid', 'banani', 'gulshan', 'mohakhali'],
         subAreas: [
-          { name: 'Shia Masjid / Japan Garden City', busHub: 'Shia Masjid Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Shia Masjid Stand', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Adabor / Shekhertek / Ring Road', busHub: 'Shyamoli / Ring Road Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Shyamoli Stand', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Mohammadpur Bus Stand / Town Hall', busHub: 'Mohammadpur Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Mohammadpur Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+          { name: 'Shia Masjid / Japan Garden City', busHub: 'Shia Masjid Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Agargaon MRT Station (Closest)', metroWalk: 18, metroRick: 9, metroRickFare: 45, hasLeguna: true, legunaFare: 15, legunaMins: 7 },
+          { name: 'Adabor / Shekhertek / Ring Road', busHub: 'Shyamoli / Ring Road Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Agargaon MRT Station (Closest)', metroWalk: 16, metroRick: 8, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Mohammadpur Bus Stand / Town Hall', busHub: 'Mohammadpur Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Farmgate / Agargaon MRT Station', metroWalk: 24, metroRick: 11, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 9 }
         ],
         destSubAreas: [
-          { name: 'Banani / Kakoli Bus Stand', busHub: 'Banani Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Banani Stand', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Gulshan 1 / Gulshan 2', busHub: 'Banani / Mohakhali Stand', busWalk: 14, busRick: 7, busRickFare: 40, metroHub: 'Banani Stand', metroWalk: 14, metroRick: 7, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Banani / Kakoli Bus Stand', busHub: 'Banani Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Bijoy Sarani MRT Station (Feeder Required)', metroWalk: 32, metroRick: 15, metroRickFare: 70, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Gulshan 1 / Gulshan 2', busHub: 'Banani / Mohakhali Stand', busWalk: 14, busRick: 7, busRickFare: 40, metroHub: 'Bijoy Sarani / Farmgate MRT Station (Feeder Required)', metroWalk: 38, metroRick: 18, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ]
       },
 
@@ -722,13 +794,13 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'New Market / Science Lab ➔ Shyamoli, Technical & Mirpur 1 / 2',
         keywords: ['mirpur 1', 'mirpur 2', 'sony', 'technical', 'kalyanpur', 'shyamoli', 'science lab', 'new market', 'nilkhet'],
         subAreas: [
-          { name: 'Mirpur 1 Sony Square / Gol Chattar', busHub: 'Mirpur 1 Bus Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 1 Stand', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Mirpur 2 Stadium / Commerce College', busHub: 'Mirpur 2 / Sony Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 2 Stand', metroWalk: 8, metroRick: 4, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Technical / Mazar Road / Kalyanpur', busHub: 'Technical / Kalyanpur Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Technical Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Mirpur 1 Sony Square / Gol Chattar', busHub: 'Mirpur 1 Bus Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Mirpur 10 MRT Station (Closest)', metroWalk: 22, metroRick: 10, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 7 },
+          { name: 'Mirpur 2 Stadium / Commerce College', busHub: 'Mirpur 2 / Sony Stand', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Mirpur 10 MRT Station (Closest)', metroWalk: 12, metroRick: 6, metroRickFare: 30, hasLeguna: true, legunaFare: 15, legunaMins: 5 },
+          { name: 'Technical / Mazar Road / Kalyanpur', busHub: 'Technical / Kalyanpur Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon / Shewrapara MRT Station', metroWalk: 24, metroRick: 11, metroRickFare: 45, hasLeguna: true, legunaFare: 15, legunaMins: 8 }
         ],
         destSubAreas: [
-          { name: 'New Market / Nilkhet / Gausia', busHub: 'New Market / Nilkhet Stop', busWalk: 4, busRick: 2, busRickFare: 20, metroHub: 'New Market Stop', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Science Lab / Dhanmondi 2', busHub: 'Science Lab Stop', busWalk: 4, busRick: 2, busRickFare: 20, metroHub: 'Science Lab Stop', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'New Market / Nilkhet / Gausia', busHub: 'New Market / Nilkhet Stop', busWalk: 4, busRick: 2, busRickFare: 20, metroHub: 'Dhaka University (TSC) / Shahbagh MRT Station', metroWalk: 14, metroRick: 6, metroRickFare: 35, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Science Lab / Dhanmondi 2', busHub: 'Science Lab Stop', busWalk: 4, busRick: 2, busRickFare: 20, metroHub: 'Shahbagh MRT Station (Closest)', metroWalk: 14, metroRick: 6, metroRickFare: 35, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ]
       },
 
@@ -743,7 +815,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         subAreas: [
           { name: 'Jatrabari Chowrasta / Flyover Gate', busHub: 'Jatrabari Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Motijheel MRT Station (Closest)', metroWalk: 24, metroRick: 11, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 9 },
           { name: 'Sayedabad / Janapath / Golapbagh', busHub: 'Sayedabad Bus Terminal', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Motijheel MRT Station', metroWalk: 18, metroRick: 8, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 7 },
-          { name: 'Shonir Akhra / Kajla / Donia', busHub: 'Kajla Flyover Pocket Gate', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Motijheel MRT (via Hanif Flyover Bus)', metroWalk: 30, metroRick: 14, metroRickFare: 60, hasLeguna: true, legunaFare: 20, legunaMins: 10 }
+          { name: 'Shonir Akhra / Kajla / Donia', busHub: 'Kajla Flyover Pocket Gate', busWalk: 8, busRick: 4, busRickFare: 30, metroHub: 'Motijheel MRT Station (via Hanif Flyover Bus)', metroWalk: 30, metroRick: 14, metroRickFare: 60, hasLeguna: true, legunaFare: 20, legunaMins: 10 }
         ],
         destSubAreas: [
           { name: 'Shahbagh / BSMMU / National Museum', busHub: 'Shahbagh Bus Stop', busWalk: 4, busRick: 2, busRickFare: 20, metroHub: 'Shahbagh MRT Station', metroWalk: 4, metroRick: 2, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
@@ -760,12 +832,12 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Rampura / Badda / Bashundhara ➔ Airport & Uttara',
         keywords: ['uttara', 'airport', 'khilkhet', 'kuril', 'bashundhara', 'notun bazar', 'badda', 'rampura', 'banasree'],
         subAreas: [
-          { name: 'Uttara House Building / Sector 6 & 7', busHub: 'House Building Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'House Building Stand', metroWalk: 6, metroRick: 4, metroRickFare: 30, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Uttara Rajlakshmi / Jasimuddin / Airport', busHub: 'Airport / Rajlakshmi Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Airport Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Uttara House Building / Sector 6 & 7', busHub: 'House Building Bus Stand', busWalk: 6, busRick: 4, busRickFare: 30, metroHub: 'Uttara North MRT Station (Diabari)', metroWalk: 24, metroRick: 12, metroRickFare: 60, hasLeguna: true, legunaFare: 15, legunaMins: 10 },
+          { name: 'Uttara Rajlakshmi / Jasimuddin / Airport', busHub: 'Airport / Rajlakshmi Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Uttara South MRT Station (Closest)', metroWalk: 22, metroRick: 11, metroRickFare: 60, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ],
         destSubAreas: [
-          { name: 'Middle Badda / Rampura Bridge / Banasree', busHub: 'Middle Badda / Rampura Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Rampura Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: true, legunaFare: 15, legunaMins: 4 },
-          { name: 'Bashundhara Gate / Jamuna Future Park / Notun Bazar', busHub: 'Jamuna Future Park Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Jamuna Future Park Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Middle Badda / Rampura Bridge / Banasree', busHub: 'Middle Badda / Rampura Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Karwan Bazar MRT Station (Feeder via Rampura)', metroWalk: 35, metroRick: 16, metroRickFare: 70, hasLeguna: true, legunaFare: 15, legunaMins: 11 },
+          { name: 'Bashundhara Gate / Jamuna Future Park / Notun Bazar', busHub: 'Jamuna Future Park Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Pallabi / Uttara South MRT Station (Feeder Required)', metroWalk: 45, metroRick: 20, metroRickFare: 80, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ]
       },
 
@@ -796,11 +868,11 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Motijheel / Paltan / Malibagh ➔ Rampura, Badda & Notun Bazar',
         keywords: ['badda', 'notun bazar', 'rampura', 'banasree', 'malibagh', 'mouchak', 'shantinagar', 'kakrail', 'paltan', 'motijheel'],
         subAreas: [
-          { name: 'Notun Bazar / Middle Badda', busHub: 'Middle Badda Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Middle Badda Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Rampura Bridge / Banasree (Block A–F)', busHub: 'Rampura Bridge Stand', busWalk: 10, busRick: 5, busRickFare: 35, metroHub: 'Rampura Stand', metroWalk: 10, metroRick: 5, metroRickFare: 35, hasLeguna: true, legunaFare: 15, legunaMins: 5 }
+          { name: 'Notun Bazar / Middle Badda', busHub: 'Middle Badda Bus Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Karwan Bazar MRT Station (Feeder Required)', metroWalk: 38, metroRick: 18, metroRickFare: 75, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Rampura Bridge / Banasree (Block A–F)', busHub: 'Rampura Bridge Stand', busWalk: 10, busRick: 5, busRickFare: 35, metroHub: 'Karwan Bazar / Motijheel MRT Station (Feeder Required)', metroWalk: 32, metroRick: 15, metroRickFare: 65, hasLeguna: true, legunaFare: 15, legunaMins: 10 }
         ],
         destSubAreas: [
-          { name: 'Motijheel Shapla Chattar / Paltan', busHub: 'Motijheel / Paltan Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Motijheel Stand', metroWalk: 4, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Motijheel Shapla Chattar / Paltan', busHub: 'Motijheel / Paltan Stand', busWalk: 4, busRick: 3, busRickFare: 25, metroHub: 'Motijheel / Bangladesh Secretariat MRT Station', metroWalk: 4, metroRick: 3, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ]
       },
 
@@ -847,11 +919,11 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Motijheel / Farmgate / Shyamoli ➔ Gabtoli, Hemayetpur & Savar',
         keywords: ['savar', 'hemayetpur', 'aminbazar', 'jahangirnagar', 'gabtoli', 'farmgate', 'motijheel'],
         subAreas: [
-          { name: 'Savar Bazar / Radio Colony / C&B', busHub: 'Savar Highway Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Savar Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
-          { name: 'Hemayetpur Bus Stand', busHub: 'Hemayetpur Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Hemayetpur Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Savar Bazar / Radio Colony / C&B', busHub: 'Savar Highway Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon / Mirpur 10 MRT Station (via Gabtoli Bus)', metroWalk: 60, metroRick: 35, metroRickFare: 50, hasLeguna: false, legunaFare: 0, legunaMins: 0 },
+          { name: 'Hemayetpur Bus Stand', busHub: 'Hemayetpur Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Agargaon / Mirpur 10 MRT Station (via Gabtoli Bus)', metroWalk: 45, metroRick: 25, metroRickFare: 40, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ],
         destSubAreas: [
-          { name: 'Farmgate / Shahbagh / Motijheel', busHub: 'Farmgate / Motijheel Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Farmgate / Motijheel Stand', metroWalk: 5, metroRick: 3, metroRickFare: 25, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
+          { name: 'Farmgate / Shahbagh / Motijheel', busHub: 'Farmgate / Motijheel Stand', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Farmgate / Motijheel MRT Station', metroWalk: 5, metroRick: 3, metroRickFare: 20, hasLeguna: false, legunaFare: 0, legunaMins: 0 }
         ]
       },
 
@@ -864,7 +936,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         reverseLabel: 'Uttara / Airport ➔ Old Dhaka (Victoria Park / Sadarghat)',
         keywords: ['sadarghat', 'old dhaka', 'puran dhaka', 'victoria park', 'jagannath university', 'ray saheb bazar', 'wari', 'uttara'],
         subAreas: [
-          { name: 'Sadarghat / Victoria Park (JnU)', busHub: 'Victoria Park Bus Terminal', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Secretariat MRT Station (Closest)', metroWalk: 20, metroRick: 10, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
+          { name: 'Sadarghat / Victoria Park (JnU)', busHub: 'Victoria Park Bus Terminal', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Bangladesh Secretariat MRT Station (Closest)', metroWalk: 20, metroRick: 10, metroRickFare: 50, hasLeguna: true, legunaFare: 15, legunaMins: 8 },
           { name: 'Ray Saheb Bazar / Wari / Dayaganj', busHub: 'Ray Saheb Bazar Stop', busWalk: 5, busRick: 3, busRickFare: 25, metroHub: 'Motijheel / Secretariat MRT Station', metroWalk: 16, metroRick: 8, metroRickFare: 40, hasLeguna: true, legunaFare: 15, legunaMins: 7 }
         ],
         destSubAreas: [
@@ -875,7 +947,6 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
 
     /**
      * ROUTE OPTIONS DATASET
-     * Uses Official Google Maps Embed Queries (`mapQuery` & automatic reverse flip)
      */
     const ROUTES_DATA = [
       // 1. MIRPUR <-> GULSHAN / BANANI
@@ -1586,10 +1657,193 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
       }
     ];
 
+    // "Arrive By" vs "Leave Now" Mode Switcher
+    function setTimeMode(mode) {
+      currentTimeMode = mode;
+      const arriveBtn = document.getElementById('modeArriveBtn');
+      const leaveNowBtn = document.getElementById('modeLeaveNowBtn');
+
+      if (mode === 'leave_now') {
+        arriveBtn.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold text-slate-600 hover:text-slate-900 transition';
+        leaveNowBtn.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-700 text-white transition shadow-sm';
+        syncClockToCurrentDhakaTime();
+      } else {
+        arriveBtn.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-700 text-white transition shadow-sm';
+        leaveNowBtn.className = 'px-2 py-0.5 rounded-md text-[10px] font-extrabold text-slate-600 hover:text-slate-900 transition';
+      }
+      renderApp();
+    }
+
+    function syncClockToCurrentDhakaTime() {
+      const now = new Date();
+      let h = now.getHours();
+      const m = Math.min(55, Math.round(now.getMinutes() / 5) * 5);
+      const period = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+
+      document.getElementById('TargetHour12').value = String(h);
+      document.getElementById('TargetMinute12').value = String(m);
+      document.getElementById('TargetPeriod12').value = period;
+    }
+
+    function onClockManualChange() {
+      renderApp();
+    }
+
+    /**
+     * ACCURATE LIVE DHAKA WEATHER SYNC (No-Cache Airport METAR + ECMWF High-Res Fallback)
+     */
+    async function checkLiveDhakaWeather(manualRefresh = false) {
+      const badge = document.getElementById('liveWeatherBadge');
+      if (manualRefresh && badge) {
+        badge.classList.remove('hidden');
+        badge.textContent = '↻ Updating Dhaka Weather...';
+      }
+
+      const applyWeatherUI = (tempC, isRaining, conditionText) => {
+        badge.classList.remove('hidden');
+        if (isRaining) {
+          badge.innerHTML = `🌧️ Dhaka ${tempC}°C (${conditionText}) • Rain Buffer On`;
+          badge.className = 'cursor-pointer text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-sky-500/30 text-sky-200 border border-sky-400/50 transition';
+          const rainBox = document.getElementById('rainToggle');
+          if (rainBox && !rainBox.checked) {
+            rainBox.checked = true;
+            renderApp();
+          }
+        } else {
+          badge.innerHTML = `🌤️ Dhaka Live: ${tempC}°C • ${conditionText}`;
+          badge.className = 'cursor-pointer text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-emerald-200 border border-white/15 transition';
+        }
+      };
+
+      try {
+        const res = await fetch(`https://wttr.in/Dhaka?format=j1&_t=${Date.now()}`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const current = data?.current_condition?.[0];
+          if (current && current.temp_C !== undefined) {
+            const tempC = parseInt(current.temp_C, 10);
+            const desc = current.weatherDesc?.[0]?.value || 'Clear';
+            const precipMm = parseFloat(current.precipMM || '0');
+            const isRain = precipMm > 0.3 || /rain|drizzle|thunder|shower|storm/i.test(desc);
+            applyWeatherUI(tempC, isRain, desc);
+            return;
+          }
+        }
+      } catch (e) {}
+
+      try {
+        const res2 = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=23.8103&longitude=90.4125&current=temperature_2m,precipitation,rain,weather_code&timezone=Asia%2FDhaka&_t=${Date.now()}`, { cache: 'no-store' });
+        if (!res2.ok) return;
+        const data2 = await res2.json();
+        if (!data2 || !data2.current) return;
+
+        const temp = Math.round(data2.current.temperature_2m);
+        const rainMm = (data2.current.rain || 0) + (data2.current.precipitation || 0);
+        const code = data2.current.weather_code || 0;
+        const isRainingNow = rainMm > 0.2 || (code >= 51 && code <= 99);
+        const condLabel = isRainingNow ? 'Rain' : (code >= 1 && code <= 3 ? 'Partly Cloudy' : 'Clear');
+        applyWeatherUI(temp, isRainingNow, condLabel);
+      } catch (e) {}
+    }
+
+    /**
+     * NATIVE SHARE SHEET LAUNCHER (Opens the exact Android/iOS/Windows "Sharing text" drawer)
+     */
+    function openFallbackShareSheet(title, fullText, publicUrl) {
+      document.getElementById('shareModalTitle').textContent = title;
+      document.getElementById('shareModalPreview').textContent = fullText;
+
+      const encodedText = encodeURIComponent(fullText);
+      const encodedUrl = encodeURIComponent(publicUrl);
+
+      document.getElementById('shareWhatsAppLink').href = `https://wa.me/?text=${encodedText}`;
+      document.getElementById('shareTelegramLink').href = `https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`;
+      document.getElementById('shareLinkedInLink').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+      document.getElementById('shareEmailLink').href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodedText}`;
+
+      const modal = document.getElementById('shareSheetModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeShareSheet() {
+      const modal = document.getElementById('shareSheetModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function triggerNativeShareSheet(title, textMsg) {
+      const isHttp = window.location.protocol.startsWith('http');
+      const publicUrl = isHttp ? window.location.href : 'https://null-hydra.github.io/buffer-dhaka/';
+      const fullShareText = `${textMsg}\n${publicUrl}`;
+
+      if (navigator.share) {
+        try {
+          const sharePayload = isHttp
+            ? { title: title, text: textMsg, url: publicUrl }
+            : { title: title, text: fullShareText };
+          await navigator.share(sharePayload);
+          return;
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+        }
+      }
+
+      openFallbackShareSheet(title, fullShareText, publicUrl);
+    }
+
+    async function shareRoutePlan(event, routeTitle, hubName, leaveBy, arriveBy, totalCost, totalDuration) {
+      event.stopPropagation();
+      const corridorId = document.getElementById('corridorSelect').value;
+      const corridorObj = CORRIDORS.find(c => c.id === corridorId) || CORRIDORS[0];
+      const dirTitle = isReversedDirection ? corridorObj.reverseLabel : corridorObj.label;
+
+      const textMsg = `🚏 Buffer Dhaka Route Plan (${dirTitle}):\n• Take: ${routeTitle}\n• Board at: ${hubName}\n• Leave Home: ${leaveBy} ➔ Arrive: ${arriveBy} (${totalDuration})\n• Total Cost: ৳${totalCost}`;
+      await triggerNativeShareSheet('Buffer Dhaka — Smart Arrival & Transit Planner', textMsg);
+    }
+
+    /**
+     * DYNAMIC SHARED LEGUNA / AUTO AVAILABILITY
+     */
+    function updateFirstMileOptions(subArea) {
+      const modeSelect = document.getElementById('firstMileMode');
+      if (!modeSelect) return;
+
+      const previousMode = modeSelect.value || 'rickshaw';
+      const options = [
+        { value: 'rickshaw', label: `Reserve Rickshaw (Doorstep Pickup)` }
+      ];
+
+      if (subArea && subArea.hasLeguna) {
+        options.push({
+          value: 'leguna',
+          label: `Shared Leguna / Auto (৳${subArea.legunaFare} Available Here)`
+        });
+      }
+
+      options.push(
+        { value: 'walk', label: 'Walking Directly (৳0)' },
+        { value: 'none', label: 'Already at Station / Stand (0m)' }
+      );
+
+      modeSelect.innerHTML = options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+
+      if (options.some(o => o.value === previousMode)) {
+        modeSelect.value = previousMode;
+      } else {
+        modeSelect.value = 'rickshaw';
+      }
+    }
+
+    // USER-CONTROLLED MONTHLY BUDGET CALCULATOR
+    function updateCustomDays(val) {
+      userMonthlyDays = val;
+      renderApp();
+    }
+
     /**
      * CLEAN & HONEST FILTER SEARCH BAR
-     * Shows only genuine matches across corridors, bus operators, and starting points.
-     * Never forces an unrelated route when a location is not covered.
      */
     function handleSearchInput() {
       const input = document.getElementById('routeSearchInput');
@@ -1670,11 +1924,9 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
 
     function selectFilteredCorridor(corridorId, reverseFlag) {
       isReversedDirection = reverseFlag;
-      document.getElementById('corridorSelect').value = corridorId;
+      updateCorridorDropdownLabels(corridorId);
       document.getElementById('searchResultsDropdown').classList.add('hidden');
       selectedRouteId = null;
-
-      updateCorridorDropdownLabels();
       populateSubAreas(0);
     }
 
@@ -1693,18 +1945,27 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
 
     // TWO-WAY DIRECTION SWAP FUNCTION
     function toggleReverseDirection() {
+      const currentVal = document.getElementById('corridorSelect').value;
       isReversedDirection = !isReversedDirection;
       selectedRouteId = null;
-      updateCorridorDropdownLabels();
-      populateSubAreas(0);
+      updateCorridorDropdownLabels(currentVal);
+      if (currentVal) {
+        populateSubAreas(0);
+      } else {
+        renderApp();
+      }
     }
 
-    function updateCorridorDropdownLabels() {
+    function updateCorridorDropdownLabels(selectedVal = null) {
       const select = document.getElementById('corridorSelect');
-      const currentVal = select.value || CORRIDORS[0].id;
-      select.innerHTML = CORRIDORS.map(c =>
+      const currentVal = selectedVal !== null ? selectedVal : select.value;
+
+      const placeholderOption = `<option value="" disabled ${!currentVal ? 'selected' : ''}>— Select Your Route & Destination First —</option>`;
+      const corridorOptions = CORRIDORS.map(c =>
         `<option value="${c.id}" ${c.id === currentVal ? 'selected' : ''}>${isReversedDirection ? c.reverseLabel : c.label}</option>`
       ).join('');
+
+      select.innerHTML = placeholderOption + corridorOptions;
 
       const badge = document.getElementById('directionBadge');
       if (isReversedDirection) {
@@ -1717,24 +1978,40 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
     }
 
     function initCorridors() {
-      updateCorridorDropdownLabels();
+      updateCorridorDropdownLabels('');
     }
 
     function populateSubAreas(defaultIdx = 0) {
       const corridorId = document.getElementById('corridorSelect').value;
+      const subSelect = document.getElementById('subAreaSelect');
+
+      if (!corridorId) {
+        subSelect.innerHTML = `<option value="" disabled selected>— Select a route in Step 1 first —</option>`;
+        renderApp();
+        return;
+      }
+
       const corridor = CORRIDORS.find(c => c.id === corridorId) || CORRIDORS[0];
       const activeSubAreas = isReversedDirection ? corridor.destSubAreas : corridor.subAreas;
 
       document.getElementById('startingPointLabel').textContent = `Exact Starting Point in ${isReversedDirection ? corridor.destShort : corridor.originShort}`;
 
-      const subSelect = document.getElementById('subAreaSelect');
       subSelect.innerHTML = activeSubAreas.map((sa, idx) =>
         `<option value="${idx}" ${idx === defaultIdx ? 'selected' : ''}>${sa.name}</option>`
       ).join('');
+
+      updateFirstMileOptions(activeSubAreas[defaultIdx] || activeSubAreas[0]);
       renderApp();
     }
 
     function onSubAreaChange() {
+      const corridorId = document.getElementById('corridorSelect').value;
+      const corridor = CORRIDORS.find(c => c.id === corridorId);
+      if (corridor) {
+        const activeSubAreas = isReversedDirection ? corridor.destSubAreas : corridor.subAreas;
+        const subIdx = parseInt(document.getElementById('subAreaSelect').value, 10) || 0;
+        updateFirstMileOptions(activeSubAreas[subIdx] || activeSubAreas[0]);
+      }
       renderApp();
     }
 
@@ -1746,8 +2023,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
     function quickSelect(corridorId) {
       clearSearch();
       isReversedDirection = false;
-      document.getElementById('corridorSelect').value = corridorId;
-      updateCorridorDropdownLabels();
+      updateCorridorDropdownLabels(corridorId);
       selectedRouteId = null;
       populateSubAreas(0);
     }
@@ -1776,7 +2052,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
       return remMins === 0 ? `${hours} hr` : `${hours} hr ${remMins} mins`;
     }
 
-    function getTargetArrivalMinutes() {
+    function getSelectedClockMinutes() {
       let h = parseInt(document.getElementById('TargetHour12').value, 10);
       const m = parseInt(document.getElementById('TargetMinute12').value, 10);
       const period = document.getElementById('TargetPeriod12').value;
@@ -1849,22 +2125,26 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
 
     function renderApp() {
       const corridorId = document.getElementById('corridorSelect').value;
-      const corridorObj = CORRIDORS.find(c => c.id === corridorId) || CORRIDORS[0];
-      const targetArrivalMins = getTargetArrivalMinutes();
-      const targetArrivalFormatted = formatMinutesTo12Hour(targetArrivalMins);
+      const selectedClockMins = getSelectedClockMinutes();
+      const selectedClockFormatted = formatMinutesTo12Hour(selectedClockMins);
+      const isFriday = document.getElementById('fridayScheduleToggle').checked;
 
       // Time of Day Rush Multiplier
       let timeMult = 1.0;
       const rushBadge = document.getElementById('rushStatusBadge');
-      if (targetArrivalMins >= 480 && targetArrivalMins <= 660) {
+      if (isFriday && selectedClockMins < 900) {
+        timeMult = 0.80;
+        rushBadge.textContent = 'Friday Morning Clear Roads';
+        rushBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900';
+      } else if (selectedClockMins >= 480 && selectedClockMins <= 660) {
         timeMult = 1.12;
         rushBadge.textContent = 'Morning Office Rush';
         rushBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900';
-      } else if (targetArrivalMins >= 1020 && targetArrivalMins <= 1260) {
+      } else if (selectedClockMins >= 1020 && selectedClockMins <= 1260) {
         timeMult = 1.18;
         rushBadge.textContent = 'Evening Peak Rush';
         rushBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-900';
-      } else if (targetArrivalMins >= 1320 || targetArrivalMins <= 390) {
+      } else if (selectedClockMins >= 1320 || selectedClockMins <= 390) {
         timeMult = 0.75;
         rushBadge.textContent = 'Late Night Clear Roads';
         rushBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900';
@@ -1874,6 +2154,53 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         rushBadge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-800';
       }
 
+      ['budget', 'balanced', 'fastest'].forEach(p => {
+        const btn = document.getElementById(`pref-${p}`);
+        btn.className = p === currentPreference
+          ? 'p-3 rounded-xl border-2 text-left transition bg-emerald-700 border-emerald-700 text-white shadow-sm'
+          : 'p-3 rounded-xl border text-left transition bg-slate-50 border-slate-200 text-slate-700 hover:bg-emerald-50/50';
+      });
+
+      ['casual', 'important', 'critical'].forEach(s => {
+        const btn = document.getElementById(`stakes-${s}`);
+        btn.className = s === currentStakes
+          ? 'p-3 rounded-xl border-2 text-left transition bg-indigo-700 border-indigo-700 text-white shadow-sm'
+          : 'p-3 rounded-xl border text-left transition bg-slate-50 border-slate-200 text-slate-700 hover:bg-indigo-50/50';
+      });
+
+      const summaryEl = document.getElementById('recommendationSummary');
+      const headerBar = document.getElementById('routesHeaderBar');
+      const container = document.getElementById('routesContainer');
+
+      // EMPTY STATE WHEN NO ROUTE IS SELECTED YET
+      if (!corridorId) {
+        summaryEl.classList.add('hidden');
+        headerBar.classList.add('hidden');
+        headerBar.classList.remove('flex');
+        document.getElementById('hubRoutingPreview').className = 'text-xs bg-white border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-500';
+        document.getElementById('hubRoutingPreview').innerHTML = 'Select a route in Step 1 above to view your nearest Bus Stand and Metro Station.';
+
+        container.innerHTML = `
+          <div class="bg-white border-2 border-dashed border-slate-300 rounded-2xl p-8 sm:p-10 text-center space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+            </div>
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-800">Select Your Route & Destination Above to Start</h3>
+            <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+              Choose a corridor from the dropdown menu, search for a location in Step 1, or click any of the <strong>Quick Pick</strong> buttons above to compare travel times, fares, and live Google Maps routes.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      summaryEl.classList.remove('hidden');
+      headerBar.classList.remove('hidden');
+      headerBar.classList.add('flex');
+
+      const corridorObj = CORRIDORS.find(c => c.id === corridorId) || CORRIDORS[0];
       const activeSubAreas = isReversedDirection ? corridorObj.destSubAreas : corridorObj.subAreas;
       const subIdx = parseInt(document.getElementById('subAreaSelect').value, 10) || 0;
       const subArea = activeSubAreas[subIdx] || activeSubAreas[0];
@@ -1892,22 +2219,13 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         metroAccessMins = subArea.metroRick + extraMins;
         metroFeederFare = subArea.metroRickFare;
         metroModeLabel = 'Reserve Rickshaw';
-      } else if (firstMileMode === 'leguna') {
-        if (subArea.hasLeguna) {
-          busAccessMins = subArea.busRick + extraMins;
-          busFeederFare = 15;
-          busModeLabel = 'Shared Leguna/Auto';
-          metroAccessMins = subArea.legunaMins + extraMins;
-          metroFeederFare = subArea.legunaFare;
-          metroModeLabel = 'Shared Leguna/Auto';
-        } else {
-          busAccessMins = subArea.busRick + extraMins;
-          busFeederFare = subArea.busRickFare;
-          busModeLabel = 'Reserve Rickshaw (No Leguna)';
-          metroAccessMins = subArea.metroRick + extraMins;
-          metroFeederFare = subArea.metroRickFare;
-          metroModeLabel = 'Reserve Rickshaw (No Leguna)';
-        }
+      } else if (firstMileMode === 'leguna' && subArea.hasLeguna) {
+        busAccessMins = subArea.busRick + extraMins;
+        busFeederFare = subArea.legunaFare;
+        busModeLabel = 'Shared Leguna/Auto';
+        metroAccessMins = subArea.legunaMins + extraMins;
+        metroFeederFare = subArea.legunaFare;
+        metroModeLabel = 'Shared Leguna/Auto';
       } else if (firstMileMode === 'walk') {
         busAccessMins = subArea.busWalk + extraMins;
         busFeederFare = 0;
@@ -1920,14 +2238,18 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         metroAccessMins = extraMins;
       }
 
+      let routes = ROUTES_DATA.filter(r => r.corridorId === corridorId);
+      const corridorHasMetro = routes.some(r => r.modeType === 'metro');
+
+      document.getElementById('hubRoutingPreview').className = 'text-xs bg-white border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-700 grid grid-cols-1 sm:grid-cols-2 gap-2';
       document.getElementById('hubRoutingPreview').innerHTML = `
         <div class="flex items-center justify-between bg-emerald-50/70 border border-emerald-200 rounded-lg px-3 py-2">
           <span><strong class="text-emerald-950">Nearest Bus Stand:</strong> ${subArea.busHub}</span>
-          <span class="font-extrabold text-emerald-900">${formatDuration(busAccessMins)} (${busFeederFare > 0 ? `৳${busFeederFare}` : '৳0'})</span>
+          <span class="font-extrabold text-emerald-900 whitespace-nowrap ml-2">${formatDuration(busAccessMins)} (${busFeederFare > 0 ? `৳${busFeederFare}` : '৳0'})</span>
         </div>
         <div class="flex items-center justify-between bg-indigo-50/70 border border-indigo-200 rounded-lg px-3 py-2">
-          <span><strong class="text-indigo-950">Nearest Metro / Hub:</strong> ${subArea.metroHub}</span>
-          <span class="font-extrabold text-indigo-900">${formatDuration(metroAccessMins)} (${metroFeederFare > 0 ? `৳${metroFeederFare}` : '৳0'})</span>
+          <span><strong class="text-indigo-950">Nearest Metro Station (MRT-6):</strong> ${subArea.metroHub}${!corridorHasMetro ? ' <span class="text-[10px] font-semibold text-indigo-700">(No direct Metro on this corridor)</span>' : ''}</span>
+          <span class="font-extrabold text-indigo-900 whitespace-nowrap ml-2">${formatDuration(metroAccessMins)} (${metroFeederFare > 0 ? `৳${metroFeederFare}` : '৳0'})</span>
         </div>
       `;
 
@@ -1937,23 +2259,8 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
       const isRain = document.getElementById('rainToggle').checked;
       const isThursday = document.getElementById('thursdayToggle').checked;
 
-      ['budget', 'balanced', 'fastest'].forEach(p => {
-        const btn = document.getElementById(`pref-${p}`);
-        btn.className = p === currentPreference
-          ? 'p-3 rounded-xl border-2 text-left transition bg-emerald-700 border-emerald-700 text-white shadow-sm'
-          : 'p-3 rounded-xl border text-left transition bg-slate-50 border-slate-200 text-slate-700 hover:bg-emerald-50/50';
-      });
-
-      ['casual', 'important', 'critical'].forEach(s => {
-        const btn = document.getElementById(`stakes-${s}`);
-        btn.className = s === currentStakes
-          ? 'p-3 rounded-xl border-2 text-left transition bg-indigo-700 border-indigo-700 text-white shadow-sm'
-          : 'p-3 rounded-xl border text-left transition bg-slate-50 border-slate-200 text-slate-700 hover:bg-indigo-50/50';
-      });
-
       const targetPercentile = currentStakes === 'casual' ? 50 : currentStakes === 'important' ? 80 : 95;
 
-      let routes = ROUTES_DATA.filter(r => r.corridorId === corridorId);
       if (busOnly) routes = routes.filter(r => r.category === 'public');
 
       const evaluated = routes.map(route => {
@@ -1985,6 +2292,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         }
 
         const totalDoorToDoorMins = bufferedRouteMins + routeFirstMileMins;
+        const typicalDoorToDoorMins = medianRouteMins + routeFirstMileMins;
         const passed = adjusted.filter(d => d <= bufferedRouteMins).length;
         const total = adjusted.length;
         const rate = Math.round((passed / total) * 100);
@@ -2001,6 +2309,34 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         }
 
         const totalPocketCost = activeTransitFare + feederCost;
+
+        // Calculate both "Arrive By" and "Leave Now" times
+        let leaveHomeBy, reachStationBy, estimatedArrivalFormatted, typicalArrivalFormatted;
+        if (currentTimeMode === 'leave_now') {
+          leaveHomeBy = selectedClockFormatted;
+          reachStationBy = formatMinutesTo12Hour(selectedClockMins + routeFirstMileMins);
+          estimatedArrivalFormatted = formatMinutesTo12Hour(selectedClockMins + totalDoorToDoorMins);
+          typicalArrivalFormatted = formatMinutesTo12Hour(selectedClockMins + typicalDoorToDoorMins);
+        } else {
+          leaveHomeBy = formatMinutesTo12Hour(selectedClockMins - totalDoorToDoorMins);
+          reachStationBy = formatMinutesTo12Hour(selectedClockMins - bufferedRouteMins);
+          estimatedArrivalFormatted = selectedClockFormatted;
+          typicalArrivalFormatted = selectedClockFormatted;
+        }
+
+        // Friday Morning & Late-Night Metro Closure Warning
+        const checkStationTimeMins = currentTimeMode === 'leave_now'
+          ? (selectedClockMins + routeFirstMileMins) % 1440
+          : ((selectedClockMins - bufferedRouteMins) % 1440 + 1440) % 1440;
+
+        let metroClosedWarning = null;
+        if (route.modeType === 'metro') {
+          if (isFriday && checkStationTimeMins < 900) {
+            metroClosedWarning = '⚠️ Friday Schedule: Dhaka Metro Rail opens at 3:00 PM on Fridays. Use surface bus before 3:00 PM.';
+          } else if (checkStationTimeMins < 420 || checkStationTimeMins > 1300) {
+            metroClosedWarning = '⚠️ Metro Closed at This Hour: MRT-6 runs 7:00 AM – 9:40 PM. Use surface bus or ride-share.';
+          }
+        }
 
         const rawStops = route.stops.split('->').map(s => s.trim());
         const orderedStops = isReversedDirection ? [...rawStops].reverse() : rawStops;
@@ -2026,6 +2362,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         } else {
           sortScore = totalDoorToDoorMins;
         }
+        if (metroClosedWarning) sortScore += 500;
 
         return {
           ...route,
@@ -2035,6 +2372,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
           feederCost,
           feederLabel,
           totalPocketCost,
+          metroClosedWarning,
           fareBadgeNote,
           specificBoardingHub,
           medianRouteMins,
@@ -2042,9 +2380,12 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
           safetyBufferMins,
           firstMileMins: routeFirstMileMins,
           totalDoorToDoorMins,
+          typicalDoorToDoorMins,
           p95RouteMins,
-          leaveHomeBy: formatMinutesTo12Hour(targetArrivalMins - totalDoorToDoorMins),
-          reachStationBy: formatMinutesTo12Hour(targetArrivalMins - bufferedRouteMins),
+          leaveHomeBy,
+          reachStationBy,
+          estimatedArrivalFormatted,
+          typicalArrivalFormatted,
           passed,
           total,
           rate,
@@ -2065,17 +2406,19 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
       document.getElementById('sortingSubtitle').textContent = prefLabels[currentPreference];
 
       const activeRoute = evaluated.find(r => r.id === selectedRouteId) || evaluated[0];
-      const summaryEl = document.getElementById('recommendationSummary');
       if (activeRoute) {
+        const mainActionLine = currentTimeMode === 'leave_now'
+          ? `Leave <strong>${subArea.name}</strong> at <span class="inline-block whitespace-nowrap bg-white text-emerald-950 px-2.5 py-0.5 rounded-lg font-extrabold mx-1">${activeRoute.leaveHomeBy}</span> ➔ Reach destination by <span class="inline-block whitespace-nowrap bg-amber-300 text-slate-950 px-3 py-0.5 rounded-lg font-extrabold ml-1 shadow-sm">${activeRoute.estimatedArrivalFormatted}</span>`
+          : `Take <span class="underline decoration-emerald-300 decoration-2 underline-offset-4">${activeRoute.title}</span> — Leave <strong>${subArea.name}</strong> by <span class="inline-block whitespace-nowrap bg-white text-emerald-950 px-3 py-0.5 rounded-lg font-extrabold ml-1 shadow-sm">${activeRoute.leaveHomeBy}</span>`;
+
         summaryEl.innerHTML = `
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
             <div class="space-y-1.5 flex-1">
               <div class="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/15 text-emerald-100">
-                ${isReversedDirection ? corridorObj.reverseLabel : corridorObj.label} • Arrive by ${targetArrivalFormatted}
+                ${isReversedDirection ? corridorObj.reverseLabel : corridorObj.label} • ${currentTimeMode === 'leave_now' ? `Leaving at ${selectedClockFormatted}` : `Arrive by ${selectedClockFormatted}`}
               </div>
               <div class="text-base sm:text-lg font-bold text-white leading-relaxed">
-                Take <span class="underline decoration-emerald-300 decoration-2 underline-offset-4">${activeRoute.title}</span> — Leave <strong>${subArea.name}</strong> by
-                <span class="inline-block whitespace-nowrap bg-white text-emerald-950 px-3 py-0.5 rounded-lg font-extrabold ml-1 shadow-sm">${activeRoute.leaveHomeBy}</span>
+                ${mainActionLine}
               </div>
               <div class="text-xs text-emerald-100/95">
                 <strong>Step 1:</strong> ${activeRoute.firstMileMins > 0 ? `${formatDuration(activeRoute.firstMileMins)} (${activeRoute.feederLabel}) to <strong>${activeRoute.specificBoardingHub}</strong> (board by <strong>${activeRoute.reachStationBy}</strong>)` : `Board directly at <strong>${activeRoute.specificBoardingHub}</strong> by <strong>${activeRoute.reachStationBy}</strong>`}.
@@ -2097,17 +2440,29 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         `;
       }
 
-      const container = document.getElementById('routesContainer');
+      const parsedDays = parseInt(userMonthlyDays, 10);
+      const hasValidCustomDays = !isNaN(parsedDays) && parsedDays > 0 && parsedDays <= 31;
+      const highestSingleTripCost = Math.max(...evaluated.map(e => e.totalPocketCost));
+
       container.innerHTML = evaluated.map((r, idx) => {
         const isSelected = r.id === selectedRouteId;
         const avgBarPct = Math.min(100, Math.round((r.medianRouteMins / 160) * 100));
         const bufBarPct = Math.min(100 - avgBarPct, Math.round((r.safetyBufferMins / 160) * 100));
+
+        const customMonthlyTotal = hasValidCustomDays ? r.totalPocketCost * 2 * parsedDays : null;
+        const customMonthlySavings = hasValidCustomDays ? (highestSingleTripCost - r.totalPocketCost) * 2 * parsedDays : 0;
 
         return `
           <div 
             onclick="selectRouteCard('${r.id}')"
             class="cursor-pointer bg-white border-2 ${isSelected ? 'border-emerald-600 ring-2 ring-emerald-500/15 shadow-md' : 'border-slate-200/90 shadow-sm hover:border-emerald-300'} rounded-2xl p-5 transition"
           >
+            ${r.metroClosedWarning ? `
+              <div class="mb-3 px-3.5 py-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs font-extrabold flex items-center gap-2">
+                <span>${r.metroClosedWarning}</span>
+              </div>
+            ` : ''}
+
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
               <div class="space-y-3 flex-1">
                 <div class="flex items-start gap-3.5">
@@ -2155,12 +2510,18 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
                 </div>
               </div>
 
-              <!-- Right Box: Leave Home Time -->
-              <div class="flex sm:flex-row lg:flex-col items-center lg:items-end justify-between bg-slate-50 border border-slate-200/90 rounded-xl px-4 py-3.5 shrink-0 lg:min-w-[230px]">
+              <!-- Right Box: Leave Home Time OR Estimated Arrival Time -->
+              <div class="flex sm:flex-row lg:flex-col items-center lg:items-end justify-between bg-slate-50 border border-slate-200/90 rounded-xl px-4 py-3.5 shrink-0 lg:min-w-[235px]">
                 <div class="text-left lg:text-right">
-                  <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800">Leave Home By</div>
-                  <div class="text-2xl font-extrabold text-slate-900 tracking-tight mt-0.5 whitespace-nowrap">${r.leaveHomeBy}</div>
-                  <div class="text-[11px] font-semibold text-slate-500 mt-0.5 whitespace-nowrap">Reach ${r.boardingHubType === 'metro' ? 'Metro' : 'Stand'} by ${r.reachStationBy}</div>
+                  <div class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800">
+                    ${currentTimeMode === 'leave_now' ? 'Estimated Arrival' : 'Leave Home By'}
+                  </div>
+                  <div class="text-2xl font-extrabold text-slate-900 tracking-tight mt-0.5 whitespace-nowrap">
+                    ${currentTimeMode === 'leave_now' ? r.estimatedArrivalFormatted : r.leaveHomeBy}
+                  </div>
+                  <div class="text-[11px] font-semibold text-slate-500 mt-0.5 whitespace-nowrap">
+                    ${currentTimeMode === 'leave_now' ? `Typical Arrival: ${r.typicalArrivalFormatted}` : `Reach ${r.boardingHubType === 'metro' ? 'Metro' : 'Stand'} by ${r.reachStationBy}`}
+                  </div>
                 </div>
                 <div class="text-right lg:mt-2.5 lg:pt-2.5 lg:border-t lg:border-slate-200/80 w-auto lg:w-full">
                   <div class="text-sm font-extrabold text-slate-900 whitespace-nowrap">${formatDuration(r.totalDoorToDoorMins)} total</div>
@@ -2169,7 +2530,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
               </div>
             </div>
 
-            <!-- Expanded Step-by-Step + Working Google Maps Preview -->
+            <!-- Expanded Step-by-Step + Interactive Budget Calculator + Share Plan + Working Google Maps Preview -->
             <div class="${isSelected ? 'block' : 'hidden'} mt-4 pt-4 border-t border-slate-200/90 space-y-4 text-xs bg-slate-50/90 rounded-xl p-4">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <div class="text-slate-700 font-semibold">
@@ -2178,13 +2539,23 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
                   Reliability: <strong class="text-emerald-800">${r.passed}/${r.total} trips on time (${r.rate}%)</strong>
                 </div>
 
-                <button 
-                  id="btn-gmap-${r.id}"
-                  onclick="toggleGoogleMapEmbed(event, '${r.id}', '${r.activeMapQuery.replace(/'/g, '')}')" 
-                  class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold transition shadow-sm"
-                >
-                  Show Google Maps Preview
-                </button>
+                <div class="flex flex-wrap items-center gap-2">
+                  <!-- Share Route Plan Button (Opens Native Share Sheet) -->
+                  <button 
+                    onclick="shareRoutePlan(event, '${r.title.replace(/'/g, '')}', '${r.specificBoardingHub.replace(/'/g, '')}', '${r.leaveHomeBy}', '${r.estimatedArrivalFormatted}', ${r.totalPocketCost}, '${formatDuration(r.totalDoorToDoorMins)}')" 
+                    class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold transition shadow-sm"
+                  >
+                    <span>📲 Share Route Plan</span>
+                  </button>
+
+                  <button 
+                    id="btn-gmap-${r.id}"
+                    onclick="toggleGoogleMapEmbed(event, '${r.id}', '${r.activeMapQuery.replace(/'/g, '')}')" 
+                    class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold transition shadow-sm"
+                  >
+                    Show Google Maps Preview
+                  </button>
+                </div>
               </div>
 
               <!-- Visual Step-by-Step Stoppage Flow -->
@@ -2210,8 +2581,38 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
                 </div>
               </div>
 
-              <div class="bg-white border border-slate-200 rounded-lg p-3 text-slate-600">
-                <strong class="text-slate-900">Route Summary:</strong> ${r.bottleneck}
+              <!-- Route Summary + Interactive User-Controlled Monthly Budget Calculator -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" onclick="event.stopPropagation()">
+                <div class="bg-white border border-slate-200 rounded-lg p-3 text-slate-600">
+                  <strong class="text-slate-900">Route Summary:</strong> ${r.bottleneck}
+                </div>
+
+                <div class="bg-emerald-50/70 border border-emerald-200 rounded-lg p-3 text-slate-700 space-y-2">
+                  <div class="font-extrabold text-emerald-950">💰 Estimate Your Monthly Commute Budget (Round-Trip)</div>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <label class="text-[11px] font-bold text-slate-600">Your Working/Class Days:</label>
+                    <input 
+                      type="number" 
+                      min="1" 
+                      max="31" 
+                      placeholder="e.g. 22" 
+                      value="${userMonthlyDays}"
+                      oninput="updateCustomDays(this.value)"
+                      class="w-20 bg-white border border-emerald-300 rounded-lg px-2.5 py-1 text-xs font-extrabold text-slate-900 focus:outline-none focus:border-emerald-600"
+                    />
+                    <span class="text-[11px] text-slate-500">days/month</span>
+                  </div>
+                  ${hasValidCustomDays ? `
+                    <div class="pt-1 border-t border-emerald-200/80 text-xs">
+                      Round-Trip Total (${parsedDays} days): <strong class="text-emerald-950 text-sm">৳${customMonthlyTotal.toLocaleString()}</strong>
+                      ${customMonthlySavings > 0 ? `<span class="inline-block ml-1.5 px-2 py-0.5 rounded bg-emerald-200/90 text-emerald-950 font-extrabold text-[10px]">Saves ৳${customMonthlySavings.toLocaleString()} vs highest option</span>` : ''}
+                    </div>
+                  ` : `
+                    <div class="text-[11px] text-slate-500">
+                      Enter your monthly commute days above to calculate your estimated round-trip cost (৳${r.totalPocketCost * 2}/day round-trip).
+                    </div>
+                  `}
+                </div>
               </div>
 
               <!-- Google Maps Embed Container -->
@@ -2245,7 +2646,7 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
     }
 
     function openModal() {
-      const corridorId = document.getElementById('corridorSelect').value;
+      const corridorId = document.getElementById('corridorSelect').value || CORRIDORS[0].id;
       const select = document.getElementById('modalRouteSelect');
       const routes = ROUTES_DATA.filter(r => r.corridorId === corridorId);
       select.innerHTML = routes.map(r => `<option value="${r.id}">${r.title}</option>`).join('');
@@ -2258,53 +2659,63 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
       document.getElementById('logModal').classList.remove('flex');
     }
 
-   async function submitTripLog() {
-  const routeId = document.getElementById('modalRouteSelect').value;
-  const mins = parseInt(document.getElementById('modalDurationInput').value, 10);
-  
-  if (!mins || mins < 5 || mins > 300) {
-    alert('Please enter a valid duration between 5 and 300 minutes.');
-    return;
-  }
-  
-  // 1. Immediately update local in-memory view
-  const route = ROUTES_DATA.find(r => r.id === routeId);
-  if (route) route.durations.push(mins);
-  
-  // 2. Write record permanently to Supabase cloud database
-  if (supabaseClient) {
-    try {
-      const isMetro = routeId.includes('metro');
-      const { error } = await supabaseClient
-        .from('trip_logs')
-        .insert([
-          {
-            corridor_id: routeId,
-            duration_mins: mins,
-            commute_mode: isMetro ? 'metro' : 'bus',
-            weather_condition: document.getElementById('rainToggle')?.checked ? 'rain' : 'normal',
-            is_thursday: document.getElementById('thursdayToggle')?.checked || false
-          }
-        ]);
-        
-      if (error) throw error;
-      alert('Success! Your commute log has been recorded to the live database.');
-    } catch (err) {
-      console.warn('Saved locally; Supabase sync note:', err.message);
-      alert('Trip recorded locally!');
+    async function submitTripLog() {
+      const routeId = document.getElementById('modalRouteSelect').value;
+      const mins = parseInt(document.getElementById('modalDurationInput').value, 10);
+
+      if (!mins || mins < 5 || mins > 300) {
+        alert('Please enter a valid duration between 5 and 300 minutes.');
+        return;
+      }
+
+      // 1. Immediately update local in-memory view
+      const route = ROUTES_DATA.find(r => r.id === routeId);
+      if (route) route.durations.push(mins);
+
+      // 2. Write record permanently to Supabase cloud database
+      if (supabaseClient) {
+        try {
+          const isMetro = routeId.includes('metro');
+          const { error } = await supabaseClient
+            .from('trip_logs')
+            .insert([
+              {
+                corridor_id: routeId,
+                duration_mins: mins,
+                commute_mode: isMetro ? 'metro' : 'bus',
+                weather_condition: document.getElementById('rainToggle')?.checked ? 'rain' : 'normal',
+                is_thursday: document.getElementById('thursdayToggle')?.checked || false
+              }
+            ]);
+
+          if (error) throw error;
+          alert('Success! Your commute log has been recorded to the live database.');
+        } catch (err) {
+          console.warn('Saved locally; Supabase sync note:', err.message);
+          alert('Trip recorded locally!');
+        }
+      } else {
+        alert('Trip recorded locally!');
+      }
+
+      document.getElementById('modalDurationInput').value = '';
+      closeModal();
+      renderApp();
     }
-  } else {
-    alert('Trip recorded locally!');
-  }
 
-  document.getElementById('modalDurationInput').value = '';
-  closeModal();
-  renderApp();
-}
+    // Initialize App with Empty Route Selection & Live Dhaka Weather Sync
+    (function initBufferApp() {
+      const dayOfWeek = new Date().getDay();
+      if (dayOfWeek === 5) document.getElementById('fridayScheduleToggle').checked = true;
+      if (dayOfWeek === 4) document.getElementById('thursdayToggle').checked = true;
 
-    initCorridors();
-    populateSubAreas(0);
-           // --- PWA APP ICON (logo.png), AUTO-HIDE INSTALL BUTTON & SHARE LOGIC ---
+      initCorridors();
+      renderApp();
+      checkLiveDhakaWeather();
+      setInterval(() => checkLiveDhakaWeather(false), 300000); // Auto-refresh weather every 5 mins
+    })();
+
+    // --- PWA APP ICON (logo.png), AUTO-HIDE INSTALL BUTTON & NATIVE SHARE SHEET LOGIC ---
     let deferredInstallPrompt = null;
 
     function hideInstallButtonPermanently() {
@@ -2314,7 +2725,6 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
     }
 
     (function setupBufferPWA() {
-      // 1. Check if already installed or running as standalone home-screen app
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
       let wasInstalledBefore = false;
       try { wasInstalledBefore = localStorage.getItem('bufferDhakaAppInstalled') === 'true'; } catch (e) {}
@@ -2323,33 +2733,33 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
         hideInstallButtonPermanently();
       }
 
-      // 2. Resolve absolute URL for logo.png so Web Manifest loads it cleanly
-      const logoAbsoluteUrl = new URL('logo.png', window.location.href).href;
+      if (window.location.protocol.startsWith('http')) {
+        const logoAbsoluteUrl = new URL('logo.png', window.location.href).href;
+        const manifest = {
+          name: 'Buffer Dhaka — Commute Intelligence',
+          short_name: 'Buffer Dhaka',
+          description: 'Smart Transit, Official Fare & Arrival Reliability Planner for Dhaka',
+          start_url: window.location.href,
+          display: 'standalone',
+          background_color: '#0f172a',
+          theme_color: '#059669',
+          icons: [
+            { src: logoAbsoluteUrl, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+            { src: logoAbsoluteUrl, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+          ]
+        };
 
-      const manifest = {
-        name: 'Buffer Dhaka — Commute Intelligence',
-        short_name: 'Buffer Dhaka',
-        description: 'Smart Transit, Official Fare & Arrival Reliability Planner for Dhaka',
-        start_url: window.location.href,
-        display: 'standalone',
-        background_color: '#0f172a',
-        theme_color: '#059669',
-        icons: [
-          { src: logoAbsoluteUrl, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-          { src: logoAbsoluteUrl, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
-        ]
-      };
+        const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+        const manifestLink = document.createElement('link');
+        manifestLink.rel = 'manifest';
+        manifestLink.href = URL.createObjectURL(manifestBlob);
+        document.head.appendChild(manifestLink);
 
-      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-      const manifestLink = document.createElement('link');
-      manifestLink.rel = 'manifest';
-      manifestLink.href = URL.createObjectURL(manifestBlob);
-      document.head.appendChild(manifestLink);
-
-      if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
-        const swCode = "self.addEventListener('fetch', function(e) {});";
-        const swBlob = new Blob([swCode], { type: 'application/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+        if ('serviceWorker' in navigator) {
+          const swCode = "self.addEventListener('fetch', function(e) {});";
+          const swBlob = new Blob([swCode], { type: 'application/javascript' });
+          navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+        }
       }
     })();
 
@@ -2358,7 +2768,6 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
       deferredInstallPrompt = e;
     });
 
-    // Automatically hide button the moment the app finishes installing
     window.addEventListener('appinstalled', () => {
       deferredInstallPrompt = null;
       hideInstallButtonPermanently();
@@ -2384,31 +2793,10 @@ const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_U
       hideInstallButtonPermanently();
     }
 
-    // Native Share / Copy Link Function for Footer Share Button
+    // Footer Share Website Button (Opens Native Share Sheet — Never Silently Copies)
     async function shareBufferWebsite() {
-      const shareData = {
-        title: 'Buffer Dhaka — Smart Arrival & Transit Planner',
-        text: 'Beat Dhaka traffic! Check exact bus/metro fares, nearest boarding hubs, and reliable departure times on Buffer Dhaka:',
-        url: window.location.href
-      };
-
-      if (navigator.share) {
-        try {
-          await navigator.share(shareData);
-          return;
-        } catch (err) {}
-      }
-
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        const btnText = document.getElementById('shareBtnText');
-        if (btnText) {
-          btnText.textContent = 'Link Copied! ✓';
-          setTimeout(() => { btnText.textContent = 'Share Website'; }, 2500);
-        }
-      } catch (err) {
-        prompt('Copy this link to share Buffer Dhaka:', window.location.href);
-      }
+      const shareText = 'Beat Dhaka traffic! Check exact bus/metro fares, nearest boarding hubs, and reliable departure times on Buffer Dhaka:';
+      await triggerNativeShareSheet('Buffer Dhaka — Smart Arrival & Transit Planner', shareText);
     }
   </script>
 </body>
